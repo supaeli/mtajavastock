@@ -26,7 +26,10 @@ public class StockDetailsServlet extends HttpServlet {
 		Date date = new Date() ;
 		c.set(2014, 11, 15) ;
 		date = c.getTime() ;
-	
+		Stock stock1 = new Stock(//data from exe details) ;
+		Stock stock2 = new Stock(//data from exe details) ;
+		Stock stock3 = new Stock(//data from exe details) ;
+		// call for getHTML for each stock, use res.*
 	}
 	
 }

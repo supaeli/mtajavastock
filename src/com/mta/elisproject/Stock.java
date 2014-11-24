@@ -8,10 +8,11 @@ public class Stock {
 	private Date date ;
 	String symbol = new String();
 	
-	Stock (float bid, float ask, Date date, String symbol) {
-		bid = ask = 0;
-		symbol = "N/A";
-		date = new Date() ;
+	public Stock (float bid, float ask, Date date, String symbol) {
+		setBid(bid);
+		setAsk(ask);
+		setSymbol(symbol);
+		setDate(date);
 	}
 	public float getBid() {//bid getter
 		return bid;
