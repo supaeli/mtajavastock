@@ -1,6 +1,7 @@
 package com.mta.elisproject ;
 import java.util.Date ;
 
+
 public class Stock {
 	private float bid ;
 	private float ask ;
