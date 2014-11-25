@@ -13,13 +13,22 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/eliproject</url-pattern>
 	</servlet-mapping>
 	
-		<servlet>
+	<servlet>
 		<servlet-name>StockDetailsServlet</servlet-name>
 		<servlet-class>com.mta.elisproject.StockDetailsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StockDetailsServlet</servlet-name>
-		<url-pattern>/stockdetailsservlet</url-pattern>
+		<url-pattern>/StockDetailsServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PrintAllExeServlet</servlet-name>
+		<servlet-class>com.mta.elisproject.PrintAllExeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PrintAllExeServlet</servlet-name>
+		<url-pattern>/PrintAllExeServlet</url-pattern>
 	</servlet-mapping>
 	
 	
