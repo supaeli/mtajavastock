@@ -1,4 +1,4 @@
-package com.mta.elisproject ;
+package com.mta.elisproject.model ;
 import java.util.Date ;
 import java.text.SimpleDateFormat;
 
@@ -42,7 +42,7 @@ public class Stock {
 	public String getHtmlDescription() {
 		String  combined ;
 		
-		combined =  new String("<b>Symbol</b>"+getSymbol()+"<b> ask: </b>" +getAsk()+", <b>bid: </b>"+getBid()+" <b>Date </b>"+ getDate()) ;//how to include a String inside brackets??
+		combined =  new String("<b>Symbol</b> "+getSymbol()+"<b> ask: </b>" +getAsk()+", <b>bid: </b>"+getBid()+" <b>Date </b>"+ getDate()) ;//how to include a String inside brackets??
 		return combined;//last line
 		
 	}

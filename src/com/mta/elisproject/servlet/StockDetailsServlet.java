@@ -1,13 +1,16 @@
 /**
  * 
  */
-package com.mta.elisproject;
+package com.mta.elisproject.servlet;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.mta.elisproject.model.Stock;
+
 import java.util.Calendar; 
 import java.util.Date ;
 /**

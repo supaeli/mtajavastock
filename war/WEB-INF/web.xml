@@ -6,7 +6,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet>
 		<servlet-name>Eliproject</servlet-name>
-		<servlet-class>com.mta.elisproject.EliprojectServlet</servlet-class>
+		<servlet-class>com.mta.elisproject.servlet.EliprojectServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Eliproject</servlet-name>
@@ -15,7 +15,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	
 	<servlet>
 		<servlet-name>StockDetailsServlet</servlet-name>
-		<servlet-class>com.mta.elisproject.StockDetailsServlet</servlet-class>
+		<servlet-class>com.mta.elisproject.servlet.StockDetailsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StockDetailsServlet</servlet-name>
@@ -23,12 +23,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>PrintAllExeServlet</servlet-name>
-		<servlet-class>com.mta.elisproject.PrintAllExeServlet</servlet-class>
+		<servlet-name>PortfolioServlet</servlet-name>
+		<servlet-class>com.mta.elisproject.servlet.PortfolioServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>PrintAllExeServlet</servlet-name>
-		<url-pattern>/PrintAllExeServlet</url-pattern>
+		<servlet-name>PortfolioServlet</servlet-name>
+		<url-pattern>/PortfolioServlet</url-pattern>
 	</servlet-mapping>
 	
 	
