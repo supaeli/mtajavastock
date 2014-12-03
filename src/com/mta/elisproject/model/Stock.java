@@ -2,6 +2,15 @@ package com.mta.elisproject.model ;
 import java.util.Date ;
 import java.text.SimpleDateFormat;
 
+/**
+ * 
+ * @author sup4eli
+ * description: presentation of a stock(e.g stock market)
+ * including buying price, selling price, date, and stock symbol 
+ * as presented in the stock market.
+ *
+ */
+
 public class Stock {
 	private float bid ;
 	private float ask ;
@@ -39,6 +48,10 @@ public class Stock {
 	public void setSymbol(String assignedSymbol) {//symbol setter
 		symbol = assignedSymbol ;
 	}
+	/**
+	 * 
+	 * @return html string presentation of mentioned above stock states
+	 */
 	public String getHtmlDescription() {
 		String  combined ;
 		

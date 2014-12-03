@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.mta.elisproject.servlet;
 
 import java.io.IOException;
@@ -14,7 +11,10 @@ import com.mta.elisproject.model.Stock;
 import java.util.Calendar; 
 import java.util.Date ;
 /**
- * @author eligr
+ * @author sup4eli
+ * inserts data into Stock instance
+ * using getHtmlDescription from Stock class to present 
+ * stocks in html presentation.(on browser)
  *
  */
 

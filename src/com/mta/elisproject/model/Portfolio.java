@@ -2,7 +2,16 @@ package com.mta.elisproject.model;
 
 
 import java.util.Date;
-
+/**
+ * 
+ * @author sup4eli
+ * a portfolio of Stock instances, holds 
+ * multiple Stock objects
+ * can add stock to a portfolio, present 
+ * the whole portfolio in html string 
+ * and has inner class for stock status, explained below.
+ *
+ */
 public class Portfolio {
 	final static int MAX_PORTFOLIO_SIZE = 5 ;
 	
@@ -32,6 +41,10 @@ public class Portfolio {
 	public int getPortfolioSize(){
 		return portfolioSize;
 	}
+	/**
+	 * purpose: return String display of Porfolio object
+	 * @return as mentioned above
+	 */
 	public String getHtmlString() {
 		int i =0 ;
 		String resStr = new String() ;
@@ -42,6 +55,10 @@ public class Portfolio {
 		}
 		return resStr; 
 	}
+	/**
+	 * add Stock object to a Stock array 
+	 * @param stock - Stock object to add
+	 */
 	public void addStock(Stock stock) {
 		
 		if(portfolioSize >= 0 && portfolioSize < MAX_PORTFOLIO_SIZE-1)//array is not full
@@ -56,7 +73,14 @@ public class Portfolio {
 			return ;
 		}
 	}
-	
+	/**
+	 * 
+	 * @author sup4eli
+	 * description: holds Stock object data fields
+	 * and other other data concerns the instance such as:
+	 * whether buy or not and stock holding number.
+	 *
+	 */
 	public class StockStatus{
 		final static int DO_NOTHING = 0 ; 
 		final static int BUY = 1 ;

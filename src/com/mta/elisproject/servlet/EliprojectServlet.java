@@ -1,7 +1,12 @@
 package com.mta.elisproject.servlet;
 import java.io.IOException;
 import javax.servlet.http.*;
-
+/**
+ * 
+ * @author sup4eli
+ * basic servlet for exercise purpose
+ *
+ */
 @SuppressWarnings("serial")
 public class EliprojectServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

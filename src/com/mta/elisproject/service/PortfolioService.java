@@ -3,9 +3,20 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.mta.elisproject.model.*;
-
+/**
+ * 
+ * @author sup4eli
+ * Portfolio 'process' class, manipulates data in 
+ * aportfolio
+ *
+ */
 public class PortfolioService {
 	
+	/**
+	 * put data in a portfolio:
+	 * date, prices, stock market symbol
+	 * @return portfolio with data(not empty)
+	 */
 	public Portfolio getPortfolio(){
 	Portfolio myPortfolio = new Portfolio() ;
 	
