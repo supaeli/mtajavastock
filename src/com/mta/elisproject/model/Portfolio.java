@@ -1,6 +1,5 @@
 package com.mta.elisproject.model;
 
-
 import java.util.Date;
 /**
  * 

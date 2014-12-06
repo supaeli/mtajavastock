@@ -1,7 +1,6 @@
 package com.mta.elisproject.model ;
 import java.util.Date ;
-import java.text.SimpleDateFormat;
-
+//import java.text.SimpleDateFormat;
 /**
  * 
  * @author sup4eli

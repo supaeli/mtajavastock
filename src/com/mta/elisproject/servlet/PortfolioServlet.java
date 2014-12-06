@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mta.elisproject.model.*;
 import com.mta.elisproject.service.PortfolioService ;
-
 /**
  * @author sup4eli
  * inserts data into portfolio instance-happens in portfolioService method

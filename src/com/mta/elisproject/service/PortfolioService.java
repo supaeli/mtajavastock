@@ -3,7 +3,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.mta.elisproject.model.*;
-
 /**
  * @author sup4eli
  * Portfolio 'process' class, manipulates data in 
