@@ -82,7 +82,14 @@ public class Portfolio {
 			return ;
 		}
 	}
-	
+	/**
+	 * 
+	 * @author sup4eli
+	 * description: holds Stock object data fields
+	 * and other other data concerns the instance such as:
+	 * whether buy or not and stock holding number.
+	 *
+	 */
 	public class StockStatus{
 		final static int DO_NOTHING = 0 ; 
 		final static int BUY = 1 ;

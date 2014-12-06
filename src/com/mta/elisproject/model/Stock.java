@@ -1,5 +1,6 @@
 package com.mta.elisproject.model ;
 import java.util.Date ;
+<<<<<<< HEAD
 //import java.text.SimpleDateFormat;
 /**
  * 
@@ -9,6 +10,19 @@ import java.util.Date ;
  * as presented in the stock market.
  *
  */
+=======
+import java.text.SimpleDateFormat;
+
+/**
+ * 
+ * @author sup4eli
+ * description: presentation of a stock(e.g stock market)
+ * including buying price, selling price, date, and stock symbol 
+ * as presented in the stock market.
+ *
+ */
+
+>>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
 public class Stock {
 	private float bid ;
 	private float ask ;
@@ -51,6 +65,10 @@ public class Stock {
 		symbol = assignedSymbol ;
 	}
 	/**
+<<<<<<< HEAD
+=======
+	 * 
+>>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
 	 * @return html string presentation of mentioned above stock states
 	 */
 	public String getHtmlDescription() {

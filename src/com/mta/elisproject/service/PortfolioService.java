@@ -4,9 +4,17 @@ import java.util.Date;
 
 import com.mta.elisproject.model.*;
 /**
+<<<<<<< HEAD
  * @author sup4eli
  * Portfolio 'process' class, manipulates data in 
  * a portfolio
+=======
+ * 
+ * @author sup4eli
+ * Portfolio 'process' class, manipulates data in 
+ * aportfolio
+ *
+>>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
  */
 public class PortfolioService {
 	

@@ -10,10 +10,19 @@ import javax.servlet.http.HttpServletResponse;
 import com.mta.elisproject.model.*;
 import com.mta.elisproject.service.PortfolioService ;
 /**
+<<<<<<< HEAD
  * @author sup4eli
  * inserts data into portfolio instance-happens in portfolioService method
  * 'getPortfolio'
  * presents a Portfolio instance as html String.(on browser)
+=======
+ * 
+ * @author sup4eli
+ * inserts data into portfolio instance-happens in portfolioService method
+ * 'getPortfolio'
+ * presents a Portfolio instance as html String.(on browser)
+ *
+>>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
  */
 @SuppressWarnings("serial")
 public class PortfolioServlet extends HttpServlet{
