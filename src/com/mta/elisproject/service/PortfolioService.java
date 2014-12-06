@@ -4,15 +4,25 @@ import java.util.Date;
 
 import com.mta.elisproject.model.*;
 
+/**
+ * @author sup4eli
+ * Portfolio 'process' class, manipulates data in 
+ * a portfolio
+ */
 public class PortfolioService {
 	
+	/**
+	 * put data in a portfolio:
+	 * date, prices, stock market symbol
+	 * @return portfolio with data(not empty)
+	 */
 	public Portfolio getPortfolio(){
-	Portfolio myPortfolio = new Portfolio() ;
+	Portfolio myPortfolio = new Portfolio("Portfolio Name", 0) ;
 	
 	
 	Calendar c =  Calendar.getInstance() ;
 	Date date = new Date() ;
-	c.set(2014, 12, 2) ;
+	c.set(2014, 11, 4) ;
 	date = c.getTime() ;
 	
 	Stock stock1 = new Stock((float)13.1, (float)12.4, date, "PIH" );//data from exe details) ;

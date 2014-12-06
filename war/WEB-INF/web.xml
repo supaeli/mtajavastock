@@ -4,23 +4,8 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-	<servlet>
-		<servlet-name>Eliproject</servlet-name>
-		<servlet-class>com.mta.elisproject.servlet.EliprojectServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Eliproject</servlet-name>
-		<url-pattern>/eliproject</url-pattern>
-	</servlet-mapping>
 	
-	<servlet>
-		<servlet-name>StockDetailsServlet</servlet-name>
-		<servlet-class>com.mta.elisproject.servlet.StockDetailsServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>StockDetailsServlet</servlet-name>
-		<url-pattern>/StockDetailsServlet</url-pattern>
-	</servlet-mapping>
+	
 	
 	<servlet>
 		<servlet-name>PortfolioServlet</servlet-name>
@@ -30,6 +15,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>PortfolioServlet</servlet-name>
 		<url-pattern>/PortfolioServlet</url-pattern>
 	</servlet-mapping>
+	
 	
 	
 	

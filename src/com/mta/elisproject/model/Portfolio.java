@@ -2,20 +2,36 @@ package com.mta.elisproject.model;
 
 
 import java.util.Date;
-
+/**
+ * 
+ * @author sup4eli
+ * a portfolio of Stock instances, holds 
+ * multiple Stock objects
+ * can add stock to a portfolio, present 
+ * the whole portfolio in html string 
+ * and has inner class for stock status, explained below.
+ *
+ */
 public class Portfolio {
 	final static int MAX_PORTFOLIO_SIZE = 5 ;
 	
-	private String title = new String("Default portfolio");
+	private String title = new String();
 	private Stock stocks[] = new Stock[MAX_PORTFOLIO_SIZE] ;
 	private StockStatus[] stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ; 
-	private int portfolioSize = 0 ;
+	private int portfolioSize ;
 	
-	public Portfolio () {
-		stocks = new Stock[MAX_PORTFOLIO_SIZE] ;
+	public Portfolio (Portfolio portfolio) {//copy c'tor
+		this(portfolio.getTitle(), portfolio.getPortfolioSize()) ; 
+		stocks = new Stock[MAX_PORTFOLIO_SIZE] ;// tried to portfolio.getStocks/status to the line above(this(...) -->
+		stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;//unsuccessfuly, seems the superior c'tor must include statements for the -->
+		//two arrays stocks and stockStatus. adding lines 19-20 to the superior c'tor seems like bad implementation of exe 6 instruction.
+	}
+	public Portfolio(String title, int size){
+		 setTitle(title);
+		 setPortfolioSize(0);
+		 stocks = new Stock[MAX_PORTFOLIO_SIZE] ;
 		stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
 	}
-	
 
 	public Stock[] getStocks() {
 		return stocks; 
@@ -29,9 +45,16 @@ public class Portfolio {
 	public void setTitle(String portfolioTitle){
 		title = portfolioTitle ;
 	}
+	public void setPortfolioSize(int size){
+		portfolioSize = size ;
+	}
 	public int getPortfolioSize(){
 		return portfolioSize;
 	}
+	/**
+	 * purpose: return String display of Porfolio object
+	 * @return as mentioned above
+	 */
 	public String getHtmlString() {
 		int i =0 ;
 		String resStr = new String() ;
@@ -42,6 +65,10 @@ public class Portfolio {
 		}
 		return resStr; 
 	}
+	/**
+	 * add Stock object to a Stock array 
+	 * @param stock - Stock object to add
+	 */
 	public void addStock(Stock stock) {
 		
 		if(portfolioSize >= 0 && portfolioSize < MAX_PORTFOLIO_SIZE-1)//array is not full
