@@ -66,12 +66,14 @@ public class Portfolio {
 		  //this.portfolioSize++; 
 		  // does the same
 	}
-public void copyStockStatusArray(StockStatus[] stockStatus,int size){//just copied above func still need to figure out the idea here..
+public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		
-		if(size >= 0 && size<= MAX_PORTFOLIO_SIZE-1)//array is not full
+		if(size >= 0 && size<= MAX_PORTFOLIO_SIZE-1 && stockStatus != null)//array is not full and not pointing to null
 		{
 			for(int i =0 ;i <=size ;i++){
-			stocksStatus[i] = new StockStatus(stockStatus[i])  ;
+					i++; 
+				
+				stocksStatus[i] = new StockStatus(stockStatus[i])  ;
 			}
 		}
 		else//array is full
