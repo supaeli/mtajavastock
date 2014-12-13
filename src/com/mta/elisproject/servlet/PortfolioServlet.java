@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mta.elisproject.model.*;
+
 import com.mta.elisproject.service.PortfolioService ;
 /**
 <<<<<<< HEAD
@@ -31,12 +32,16 @@ public class PortfolioServlet extends HttpServlet{
 			throws ServletException, IOException {
 		
 		PortfolioService portfolioService = new PortfolioService() ;
-		Portfolio portfolio = portfolioService.getPortfolio() ;
-		Stock[] stocks = portfolio.getStocks() ;
-		String string = new String() ;
+		Portfolio portfolio1 = portfolioService.getPortfolio() ;
+		Stock[] stocks = portfolio1.getStocks() ;//what is that for?
+		Portfolio portfolio2 = new Portfolio(portfolio1);
 		
-		string = portfolio.getHtmlString();
+
+		portfolio2.setTitle("Portfolio#2");
+		
 		resp.setContentType("text/html");
-		resp.getWriter().println(string);
+		resp.getWriter().println(portfolio1.getHtmlString()+"<br>"+portfolio2.getHtmlString());
+		
+		
 	}
 }

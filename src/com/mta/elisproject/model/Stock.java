@@ -56,13 +56,13 @@ public class Stock {
 		return date;
 	}
 	public void setDate(Date assignedDate) {//date setter
-		date = assignedDate ;
+		date =  assignedDate ;
 	}
 	public String getSymbol() {//symbol getter
 		return symbol ;
 	}
 	public void setSymbol(String assignedSymbol) {//symbol setter
-		symbol = assignedSymbol ;
+		symbol =new String(assignedSymbol);
 	}
 	/**
 <<<<<<< HEAD

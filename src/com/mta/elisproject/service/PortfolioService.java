@@ -24,7 +24,7 @@ public class PortfolioService {
 	 * @return portfolio with data(not empty)
 	 */
 	public Portfolio getPortfolio(){
-	Portfolio myPortfolio = new Portfolio("Portfolio Name", 0) ;
+	Portfolio myPortfolio = new Portfolio() ;
 	
 	
 	Calendar c =  Calendar.getInstance() ;
