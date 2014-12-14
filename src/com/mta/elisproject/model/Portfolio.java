@@ -71,9 +71,10 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		if(size >= 0 && size<= MAX_PORTFOLIO_SIZE-1 && stockStatus != null)//array is not full and not pointing to null
 		{
 			for(int i =0 ;i <=size ;i++){
+				if(stockStatus[i] == null)	
 					i++; 
-				
-				stocksStatus[i] = new StockStatus(stockStatus[i])  ;
+				else
+					stocksStatus[i] = new StockStatus(stockStatus[i])  ;
 			}
 		}
 		else//array is full
@@ -109,7 +110,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		int i =0 ;
 		String resStr = new String() ;
 		resStr = "<h1>"+title+"</h1>" ;
-		while(stocks[i] != null && i < MAX_PORTFOLIO_SIZE){
+		while(stocks[i] != null && i < portfolioSize){
 			resStr = resStr + "<br>" + stocks[i].getHtmlDescription() ;// getHtmlDescription(stocks );// still cannot figure y cant i use noted method- get a 'not defined for type portfolio'->A: didn't approach stock.function, did just function which is wrong.
 			i++ ;
 		}
@@ -133,6 +134,12 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			return ;
 		}
 	}
+	public void removeFirstStock(Stock[] stocks){
+		
+			portfolioSize--;
+			for(int i = 0; i < portfolioSize; i++)
+				stocks[i] =stocks[i+1];
+		}
 	
 	/**
 	 * 

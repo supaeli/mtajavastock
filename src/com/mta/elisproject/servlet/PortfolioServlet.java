@@ -33,15 +33,21 @@ public class PortfolioServlet extends HttpServlet{
 		
 		PortfolioService portfolioService = new PortfolioService() ;
 		Portfolio portfolio1 = portfolioService.getPortfolio() ;
-		Stock[] stocks = portfolio1.getStocks() ;//what is that for?
+		Stock[] stocks1 = portfolio1.getStocks() ;//what is that for?
 		Portfolio portfolio2 = new Portfolio(portfolio1);
-		
+		Stock[] stocks2 = portfolio2.getStocks() ;
 
 		portfolio2.setTitle("Portfolio#2");
 		
 		resp.setContentType("text/html");
-		resp.getWriter().println(portfolio1.getHtmlString()+"<br>"+portfolio2.getHtmlString());
+		resp.getWriter().println(portfolio1.getHtmlString()+"<br>"+portfolio2.getHtmlString());//print #1
 		
+		portfolio2.removeFirstStock(portfolio2.getStocks());
 		
+		resp.getWriter().println(portfolio1.getHtmlString()+"<br>"+portfolio2.getHtmlString());//print #2
+		
+		stocks2[2].setBid((float) 55.55);
+		
+		resp.getWriter().println(portfolio1.getHtmlString()+"<br>"+portfolio2.getHtmlString());//print #3
 	}
 }
