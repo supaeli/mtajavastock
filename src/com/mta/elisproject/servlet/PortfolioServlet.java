@@ -46,7 +46,7 @@ public class PortfolioServlet extends HttpServlet{
 		
 		resp.getWriter().println(portfolio1.getHtmlString()+"<br>"+portfolio2.getHtmlString());//print #2
 		
-		stocks2[2].setBid((float) 55.55);
+		stocks2[1].setBid((float) 55.55);
 		
 		resp.getWriter().println(portfolio1.getHtmlString()+"<br>"+portfolio2.getHtmlString());//print #3
 	}

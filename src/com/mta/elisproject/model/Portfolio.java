@@ -24,34 +24,53 @@ public class Portfolio {
 		setTitle("Portfolio #1");
 		 stocks = new Stock[MAX_PORTFOLIO_SIZE];
 		 stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
+		  if(getLogicalSizeStocks(stocks) > 0 && getLogicalSizeStocks(stocks)<= MAX_PORTFOLIO_SIZE-1){ //array is not full	
+				int logicalSizeStocks = getLogicalSizeStocks(stocks);
+				for (int i = 0; i<logicalSizeStocks; i++){
+					this.addStock(stocks[i]) ;  
+					stocksStatus[i] = new StockStatus() ;
+				}
+			}
+		 
 	}
 	
 	public Portfolio (Portfolio portfolio) {//copy c'tor
 		this(portfolio.getTitle(), portfolio.getStockStatus(), portfolio.getStocks()) ; 
 		
 	}
-	public Portfolio(String title,StockStatus[] stockStatus, Stock[] stocks ){
-		 setTitle(title);
+	public Portfolio(String title,StockStatus[] stockStatusP, Stock[] stocks ){
+		
+		setTitle(title);
 		 this.stocks = new Stock[MAX_PORTFOLIO_SIZE] ;
 	     this.stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
-		copyStocksArray(stocks, getLogicalSizeStocks(stocks));
-		copyStockStatusArray(stockStatus, getLogicalSizeStatus(stockStatus));
+	     
+		//copyStocksArray(stocks, getLogicalSizeStocks(stocks));
+		//copyStockStatusArray(stockStatus, getLogicalSizeStatus(stockStatus));
+	    
+	     if(getLogicalSizeStocks(stocks) > 0 && getLogicalSizeStocks(stocks)<= MAX_PORTFOLIO_SIZE-1)//array is not full
+		{
+			int logicalSizeStocks = getLogicalSizeStocks(stocks);
+			for (int i = 0; i<logicalSizeStocks; i++){
+				this.addStock(stocks[i]) ;  
+				//stocksStatus[i] = new StockStatus(stockStatusP[i]) ;//fix it
+			}
+		}
 	}
 	private int getLogicalSizeStocks(Stock[] stocks){//add description later
 		int i =0 ;
 		while(stocks[i]!=null && i<MAX_PORTFOLIO_SIZE){
 			i++;
 		}
-		return i;
+		return i;//-1;//else i would be returning the spot AFTER last item position(on array)
 	}
 	private int getLogicalSizeStatus(StockStatus[] OtherstockStatus){//add description later
 		int i =0 ;
 		while(OtherstockStatus[i]!=null && i<MAX_PORTFOLIO_SIZE){
 			i++;
 		}
-		return i;
+		return i;//-1;
 	}
-	private void copyStocksArray(Stock[] stocks, int size){
+	private void copyStocksArray(Stock[] stocks, int size){// combine two next func to one in the copy c'tor
 		
 		if(size > 0 && size<= MAX_PORTFOLIO_SIZE-1)//array is not full
 		{
@@ -68,13 +87,10 @@ public class Portfolio {
 	}
 public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		
-		if(size >= 0 && size<= MAX_PORTFOLIO_SIZE-1 && stockStatus != null)//array is not full and not pointing to null
+		if(size >= 0 && size<= MAX_PORTFOLIO_SIZE-1)//array is not full and not pointing to null
 		{
-			for(int i =0 ;i <=size ;i++){
-				if(stockStatus[i] == null)	
-					i++; 
-				else
-					stocksStatus[i] = new StockStatus(stockStatus[i])  ;
+			for(int i =0 ;i <=size ;i++){	
+				stocksStatus[i] = new StockStatus(stockStatus[i])  ;
 			}
 		}
 		else//array is full
@@ -124,7 +140,8 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		
 		if(portfolioSize >= 0 && portfolioSize < MAX_PORTFOLIO_SIZE-1)//array is not full
 		{
-			stocks[portfolioSize] = new Stock(stock)  ;
+			stocks[portfolioSize] = new Stock(stock) ;
+			addStockStatus();
 			portfolioSize++ ;
 			return ;
 		}
@@ -134,6 +151,13 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			return ;
 		}
 	}
+	private void addStockStatus(){
+		
+			this.stocksStatus[getLogicalSizeStocks(this.stocks)] = new StockStatus() ;
+		}
+		
+	
+
 	public void removeFirstStock(Stock[] stocks){
 		
 			portfolioSize--;
@@ -149,10 +173,10 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	 * whether buy or not and stock holding number.
 	 *
 	 */
-	public class StockStatus{
-		final static int DO_NOTHING = 0 ; 
-		final static int BUY = 1 ;
-		final static int SELL = 2 ;
+	class StockStatus{
+		public final static int DO_NOTHING = 0 ; 
+		public final static int BUY = 1 ;
+		public final static int SELL = 2 ;
 		
 		public String symbol = new String() ;
 		public float currentBid ;

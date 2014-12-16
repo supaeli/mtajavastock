@@ -36,6 +36,8 @@ public class PortfolioService {
 	Stock stock2 = new Stock((float)5.78, (float)5.5, date, "AAL");//data from exe details) ;
 	Stock stock3 = new Stock((float)31.2, (float)31.5, date, "CAAS");//data from exe details) ;
 	
+
+	
 	myPortfolio.addStock(stock1);
 	myPortfolio.addStock(stock2);
 	myPortfolio.addStock(stock3);
