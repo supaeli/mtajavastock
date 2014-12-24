@@ -13,11 +13,12 @@ import java.util.Date;
  */
 public class Portfolio {
 	final static int MAX_PORTFOLIO_SIZE = 5 ;
-	
+	enum ALGO_RECOMMENDATION{DO_NOTHING,BUY, SELL};
 	private String title ;
 	private Stock stocks[] ;
 	private StockStatus[] stocksStatus ; 
 	private int portfolioSize = 0 ;
+	private float balance = 0 ;
 	
 	
 	public Portfolio (){
@@ -130,41 +131,177 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			resStr = resStr + "<br>" + stocks[i].getHtmlDescription() ;// getHtmlDescription(stocks );// still cannot figure y cant i use noted method- get a 'not defined for type portfolio'->A: didn't approach stock.function, did just function which is wrong.
 			i++ ;
 		}
+		resStr = resStr + "<br>" + "Total portfolio value " + "$" + this.getTotalValue(this) +  ", Total stocks value " + "$"  + this.getStocksValue(this) + ", Balance " + "$" + this.getBalance()  ;
 		return resStr; 
 	}
 	/**
 	 * add Stock object to a Stock array 
+	 * updates the related stock status field using the parameter data(e.g symbol, date, etc.)
 	 * @param stock - Stock object to add
 	 */
 	public void addStock(Stock stock) {
+		int i;
+		for( i = 0; i < portfolioSize; i++ ){//validate in-existence of stock prior to the actual add action.
+			if(stock.getSymbol().equals(this.stocks[i].getSymbol())){
+				System.out.println("Stock already exist in the portfolio, cannot add it again ");
+				return;
+			}	
+		}
 		
-		if(portfolioSize >= 0 && portfolioSize < MAX_PORTFOLIO_SIZE-1)//array is not full
+		i = portfolioSize ;
+		if(i < MAX_PORTFOLIO_SIZE)//array is not full
 		{
-			stocks[portfolioSize] = new Stock(stock) ;
-			addStockStatus();
+			stocks[i] = new Stock(stock) ;
+			stocksStatus[i] = new StockStatus(stock.getSymbol(), stock.getBid(),stock.getAsk(), stock.getDate(), ALGO_RECOMMENDATION.DO_NOTHING, 0) ;//
 			portfolioSize++ ;
-			return ;
+			
 		}
 		else//array is full
 		{
-			//present array is full msg
-			return ;
+			System.out.println("Can't add new stock, portfolio can only have "+MAX_PORTFOLIO_SIZE+" stocks");
 		}
 	}
-	private void addStockStatus(){
-		
-			this.stocksStatus[getLogicalSizeStocks(this.stocks)] = new StockStatus() ;
-		}
+	
 		
 	
-
-	public void removeFirstStock(Stock[] stocks){
-		
-			portfolioSize--;
-			for(int i = 0; i < portfolioSize; i++)
-				stocks[i] =stocks[i+1];
+	/**
+	 * removes stocks from both stocks and stock status arrays and update the balance of 
+	 * the portfolio using method sellStock.
+	 * @param stockSymbol used to locate the stock in stocks array
+	 * @return bool for success/failure
+	 */
+	public boolean removeStock(String stockSymbol){// means --> selling all quantity of stock
+		int i ;
+		boolean removeFlag = false ;
+		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock prior to the actual remove action.
+			if(stockSymbol.equals(this.stocks[i].getSymbol())){
+				removeFlag = true;
+				break;
+			}
+				
 		}
-	
+		if(removeFlag){//proceed if stock existing in array
+			removeFlag = sellStock(stockSymbol, -1);//sell stock, validate operation was successful
+			if(removeFlag){//if in the above line flag became false - sellStock failed -->removeStock return false.
+				this.stocks[i] = this.stocks[portfolioSize] ;//remove from stocks []
+				this.stocksStatus[i] = this.stocksStatus[portfolioSize] ;//remove from stockStatus[]
+				portfolioSize-- ;
+			}
+		}
+		return removeFlag ;
+	}
+	/**
+	 * 	method using to sell stocks, can sell all existing stocks with "-1" input to quantity.
+	 * if so, it also removes the stock from both stocks and stock status arrays.
+	 * @param stockSymbol is a string, uses to locate the stock in stocks array
+	 * @param quantity amount of stocks wished to sell
+	 * @return bool for success/failure of operation
+	 */
+	public boolean sellStock(String stockSymbol, int quantity){// ignoring zero amount of stocks?
+		int i ;
+		int currentQuantity ;
+		boolean sellFlag = false ;
+		
+		if(quantity != -1 && quantity < 0)//negative quantity is not an option.
+			return false ;
+		
+		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock 
+			if(stockSymbol.equals(this.stocks[i].getSymbol())){
+				break;
+			}
+			sellFlag = true;
+		}
+		
+		currentQuantity = this.stocksStatus[i].getStockQuantity() ;
+		if(currentQuantity < quantity){
+			System.out.println("Not enough stocks to sell.");
+			return false ;
+		}
+		if(sellFlag){//stock present in portfolio and requested amount to sell is present as well
+			if(quantity == -1){//sell all stock quantity(and remove the stock..
+				this.updateBalance(this.stocksStatus[i].stockQuantity * this.stocksStatus[i].currentBid) ;//update balance
+				this.stocksStatus[i].stockQuantity = 0 ;//update quantity
+			}
+			else{//sell requested quantity(stock remains in portfolio
+				this.updateBalance(quantity * this.stocksStatus[i].currentBid);
+				this.stocksStatus[i].stockQuantity -= quantity ;//update quantity
+			}	
+		}
+		return sellFlag;
+	}
+	/**
+	 * 
+	 * @param amount
+	 * gets 'amount' , adds it to the balance,
+	 * amount can be negative
+	 */
+	public void updateBalance(float amount){
+		balance += amount ;
+	}
+	/**
+	 * 
+	 * @param symbol
+	 * @param quantity
+	 * @return
+	 */
+	public boolean buyStock(String symbol, int quantity){
+		int i ;
+		boolean flag = false; 
+		
+		
+		
+		//create stockStatus object according to the new stock-in case of need
+		if(quantity < 0 && quantity != -1)// validate input
+			return flag ;
+		else{
+		for(i = 0; i < this.portfolioSize; i++ ){//validate existence/in-existence of stock 
+			if(symbol.equals(this.stocks[i].getSymbol())){
+				flag = true;
+				break;
+			}
+		if((quantity * this.stocksStatus[i].getCurrentAsk() > this.balance)){
+			System.out.println("Not enough balance to complete purchase.");
+			return false;
+		}
+				
+		//check if balance fit request, later
+		
+		}
+		if(flag && quantity > 0){//stock exist, adding data
+			this.updateBalance(-1*(this.stocksStatus[i].getCurrentAsk()*quantity)) ;//update balance
+			this.stocksStatus[i].setStockQuantity(this.stocksStatus[i].getStockQuantity() + quantity);//update quantity
+		}
+		else if(quantity == -1){
+			this.updateBalance((int)this.balance / this.stocksStatus[i].getCurrentAsk() * (this.stocksStatus[i].getCurrentAsk() * -1)) ;//update balance
+			this.stocksStatus[i].setStockQuantity(this.stocksStatus[i].getStockQuantity() + quantity);//update quantity
+		}
+			
+		
+		else{//stock doens't exist, create new stock, update data
+			//cannot implement at current time, need to get stock details 
+			//from unavailable source(JSON, web page , etc.)
+			//portfolioSize++;
+		}
+		return flag;
+		}
+	}
+	public float getStocksValue(Portfolio portfolio){
+		float res = 0 ;
+		for(int i = 0; i < portfolioSize; i++){
+			if(this.stocksStatus[i] == null)
+				continue;
+			res += this.stocksStatus[i].getCurrentBid() * this.stocksStatus[i].getStockQuantity();
+		}
+			return res;
+	}
+	public float getBalance(){
+		return this.balance;
+	}
+	public float getTotalValue(Portfolio portfolio){
+		float res = 0 ;
+		res = portfolio.getBalance() + portfolio.getStocksValue(portfolio) ;
+		return res ;
+	}
 	/**
 	 * 
 	 * @author sup4eli
@@ -174,15 +311,12 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	 *
 	 */
 	class StockStatus{
-		public final static int DO_NOTHING = 0 ; 
-		public final static int BUY = 1 ;
-		public final static int SELL = 2 ;
-		
+		 
+		ALGO_RECOMMENDATION recommendation;
 		public String symbol = new String() ;
 		public float currentBid ;
 		public float currentAsk ;
 		public Date date = new Date() ;
-		public int recommendation ;
 		public int stockQuantity ;
 		
 		public StockStatus(){
@@ -191,10 +325,10 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			setCurrentBid(0) ;
 			setCurrentAsk(0) ;
 			setDate(getDate()) ;
-			setRecommendation(0) ;
+			setRecommendation(ALGO_RECOMMENDATION.DO_NOTHING) ;
 			setStockQuantity(0) ;
 		}
-		public StockStatus(String symbol, float currentBid, float currentAsk, Date date, int recommendation, int stockQuantity){//c'tor
+		public StockStatus(String symbol, float currentBid, float currentAsk, Date date, ALGO_RECOMMENDATION recommendation, int stockQuantity){//c'tor
 			setSymbol( symbol) ;
 			setCurrentBid(currentBid) ;
 			setCurrentAsk(currentAsk) ;
@@ -235,10 +369,10 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		public void setDate(Date date) {
 			this.date = date;
 		}
-		public int getRecommendation() {
+		public ALGO_RECOMMENDATION getRecommendation() {
 			return recommendation;
 		}
-		public void setRecommendation(int recommendation) {
+		public void setRecommendation(ALGO_RECOMMENDATION recommendation) {
 			this.recommendation = recommendation;
 		}
 		public int getStockQuantity() {
@@ -248,7 +382,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			this.stockQuantity = stockQuantity;
 		}
 		
-	}	
+	}
 }
 	
 	

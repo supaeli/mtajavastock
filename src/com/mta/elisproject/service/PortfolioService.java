@@ -25,22 +25,26 @@ public class PortfolioService {
 	 */
 	public Portfolio getPortfolio(){
 	Portfolio myPortfolio = new Portfolio() ;
-	
-	
+	myPortfolio.setTitle("Exercise 7 portfolio");
+	myPortfolio.updateBalance(10000);
 	Calendar c =  Calendar.getInstance() ;
 	Date date = new Date() ;
-	c.set(2014, 11, 4) ;
+	c.set(2014, 11, 23) ;
 	date = c.getTime() ;
 	
-	Stock stock1 = new Stock((float)13.1, (float)12.4, date, "PIH" );//data from exe details) ;
-	Stock stock2 = new Stock((float)5.78, (float)5.5, date, "AAL");//data from exe details) ;
-	Stock stock3 = new Stock((float)31.2, (float)31.5, date, "CAAS");//data from exe details) ;
-	
-
-	
+	Stock stock1 = new Stock(8.5f, 10f, date, "PIH" );//data from exe details) ;
+	Stock stock2 = new Stock(25.5f, 30f, date, "AAL");//data from exe details) ;
+	Stock stock3 = new Stock(15.5f, 20f, date, "CAAS");//data from exe details) ;
 	myPortfolio.addStock(stock1);
 	myPortfolio.addStock(stock2);
 	myPortfolio.addStock(stock3);
+	
+	myPortfolio.buyStock("PIH", 20) ;
+	myPortfolio.buyStock("AAL", 30) ;
+	myPortfolio.buyStock("CAAS", 40) ;
+	myPortfolio.sellStock("AAL", -1) ;
+	myPortfolio.removeStock("CAAS") ;
+	
 	
 	return myPortfolio;
 	
