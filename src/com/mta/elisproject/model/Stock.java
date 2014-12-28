@@ -24,11 +24,17 @@ import java.util.Date ;
 
 //>>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
 public class Stock {
-	private float bid ;
-	private float ask ;
-	private Date date ;
-	String symbol = new String();
+	protected float bid ;
+	protected float ask ;
+	protected Date date ;
+	protected String symbol = new String();
 	
+	public Stock (){
+		bid = 0;
+		ask = 0;
+		date = new Date();
+		symbol = "N/A";
+	}
 	public Stock (float bid, float ask, Date date, String symbol) {
 		setBid(bid);
 		setAsk(ask);
