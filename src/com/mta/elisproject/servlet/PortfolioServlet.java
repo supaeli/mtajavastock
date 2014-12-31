@@ -27,7 +27,6 @@ import com.mta.elisproject.service.PortfolioService ;
  */
 @SuppressWarnings("serial")
 public class PortfolioServlet extends HttpServlet{
-	@SuppressWarnings("unused")//remove in next exercise
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		

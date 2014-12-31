@@ -15,47 +15,43 @@ public class Portfolio {
 	final static int MAX_PORTFOLIO_SIZE = 5 ;
 	enum ALGO_RECOMMENDATION{DO_NOTHING,BUY, SELL};
 	private String title ;
-	private StockStatus[] stocksStatus ; 
+	private StockStatus[] stockStatus ; 
 	private int portfolioSize = 0 ;
 	private float balance = 0 ;
 	
 	
 	public Portfolio (){
 		setTitle("Portfolio #1");
-		 stocks = new Stock[MAX_PORTFOLIO_SIZE];
-		 stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
-		  if(getLogicalSizeStocks(stocks) > 0 && getLogicalSizeStocks(stocks)<= MAX_PORTFOLIO_SIZE-1){ //array is not full	
-				int logicalSizeStocks = getLogicalSizeStocks(stocks);
+		 stockStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
+		  if(getLogicalSizeStatus(stockStatus) > 0 && getLogicalSizeStatus(stockStatus)<= MAX_PORTFOLIO_SIZE-1){ //array is not full, figure this if statement ! ! !	
+				int logicalSizeStocks = getLogicalSizeStatus(stockStatus);
 				for (int i = 0; i<logicalSizeStocks; i++){
-					this.addStock(stocks[i]) ;  
-					stocksStatus[i] = new StockStatus() ;
+					this.addStock(stockStatus[i]) ;  
+					stockStatus[i] = new StockStatus() ;
 				}
 			}
 		 
 	}
 	
 	public Portfolio (Portfolio portfolio) {//copy c'tor
-		this(portfolio.getTitle(), portfolio.getStockStatus(), portfolio.getStocks()) ; 
+		this(portfolio.getTitle(), portfolio.getStockStatus()) ; 
 		
 	}
-	public Portfolio(String title,StockStatus[] stockStatusP, Stock[] stocks ){
+	public Portfolio(String title,StockStatus[] stockStatusP){// c'tor non-empty
 		
 		setTitle(title);
-		 this.stocks = new Stock[MAX_PORTFOLIO_SIZE] ;
-	     this.stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
-	     
-		//copyStocksArray(stocks, getLogicalSizeStocks(stocks));
-		//copyStockStatusArray(stockStatus, getLogicalSizeStatus(stockStatus));
+		this.stockStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
 	    
-	     if(getLogicalSizeStocks(stocks) > 0 && getLogicalSizeStocks(stocks)<= MAX_PORTFOLIO_SIZE-1)//array is not full
+	     if(getLogicalSizeStatus(stockStatus) > 0 && getLogicalSizeStatus(stockStatus)<= MAX_PORTFOLIO_SIZE-1)//array is not full
 		{
-			int logicalSizeStocks = getLogicalSizeStocks(stocks);
+			int logicalSizeStocks = getLogicalSizeStatus(stockStatus);
 			for (int i = 0; i<logicalSizeStocks; i++){
-				this.addStock(stocks[i]) ;  
+				this.addStock(stockStatus[i]) ;  
 				//stocksStatus[i] = new StockStatus(stockStatusP[i]) ;//fix it
 			}
 		}
 	}
+	
 	private int getLogicalSizeStocks(Stock[] stocks){//add description later
 		int i =0 ;
 		while(stocks[i]!=null && i<MAX_PORTFOLIO_SIZE){
@@ -90,7 +86,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		if(size >= 0 && size<= MAX_PORTFOLIO_SIZE-1)//array is not full and not pointing to null
 		{
 			for(int i =0 ;i <=size ;i++){	
-				stocksStatus[i] = new StockStatus(stockStatus[i])  ;
+				this.stockStatus[i] = new StockStatus(stockStatus[i])  ;
 			}
 		}
 		else//array is full
@@ -100,11 +96,8 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		}
 	}	
 	
-	public Stock[] getStocks() {
-		return stocks; 
-	}
 	public StockStatus[] getStockStatus(){
-		return this.stocksStatus ;
+		return this.stockStatus ;
 	}
 	public String getTitle(){
 		return title;
@@ -126,8 +119,8 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		int i =0 ;
 		String resStr = new String() ;
 		resStr = "<h1>"+title+"</h1>" ;
-		while(stocks[i] != null && i < portfolioSize){
-			resStr = resStr + "<br>" + stocks[i].getHtmlDescription() ;// getHtmlDescription(stocks );// still cannot figure y cant i use noted method- get a 'not defined for type portfolio'->A: didn't approach stock.function, did just function which is wrong.
+		while(stockStatus[i] != null && i < portfolioSize){
+			resStr = resStr + "<br>" + stockStatus[i].getHtmlDescription() ;// getHtmlDescription(stocks );// still cannot figure y cant i use noted method- get a 'not defined for type portfolio'->A: didn't approach stock.function, did just function which is wrong.
 			i++ ;
 		}
 		resStr = resStr + "<br>" + "Total portfolio value " + "$" + this.getTotalValue(this) +  ", Total stocks value " + "$"  + this.getStocksValue(this) + ", Balance " + "$" + this.getBalance()  ;
@@ -141,7 +134,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	public void addStock(Stock stock) {
 		int i;
 		for( i = 0; i < portfolioSize; i++ ){//validate in-existence of stock prior to the actual add action.
-			if(stock.getSymbol().equals(this.stocks[i].getSymbol())){
+			if(stock.getSymbol().equals(this.stockStatus[i].getSymbol())){
 				System.out.println("Stock already exist in the portfolio, cannot add it again ");
 				return;
 			}	
@@ -150,8 +143,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		i = portfolioSize ;
 		if(i < MAX_PORTFOLIO_SIZE)//array is not full
 		{
-			stocks[i] = new Stock(stock) ;
-			stocksStatus[i] = new StockStatus( stock.getBid(),stock.getAsk(), stock.getDate(),stock.getSymbol() , ALGO_RECOMMENDATION.DO_NOTHING, 0) ;//
+			stockStatus[i] = new StockStatus( stock.getBid(),stock.getAsk(), stock.getDate(),stock.getSymbol() , ALGO_RECOMMENDATION.DO_NOTHING, 0) ;//
 			portfolioSize++ ;
 			
 		}
@@ -173,7 +165,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		int i ;
 		boolean removeFlag = false ;
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock prior to the actual remove action.
-			if(stockSymbol.equals(this.stocks[i].getSymbol())){
+			if(stockSymbol.equals(this.stockStatus[i].getSymbol())){
 				removeFlag = true;
 				break;
 			}
@@ -182,8 +174,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		if(removeFlag){//proceed if stock existing in array
 			removeFlag = sellStock(stockSymbol, -1);//sell stock, validate operation was successful
 			if(removeFlag){//if in the above line flag became false - sellStock failed -->removeStock return false.
-				this.stocks[i] = this.stocks[portfolioSize] ;//remove from stocks []
-				this.stocksStatus[i] = this.stocksStatus[portfolioSize] ;//remove from stockStatus[]
+				this.stockStatus[i] = this.stockStatus[portfolioSize] ;//remove from stockStatus[]
 				portfolioSize-- ;
 			}
 		}
@@ -205,25 +196,25 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			return false ;
 		
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock 
-			if(stockSymbol.equals(this.stocks[i].getSymbol())){
+			if(stockSymbol.equals(this.stockStatus[i].getSymbol())){
 				break;
 			}
 			sellFlag = true;
 		}
 		
-		currentQuantity = this.stocksStatus[i].getStockQuantity() ;
+		currentQuantity = this.stockStatus[i].getStockQuantity() ;
 		if(currentQuantity < quantity){
 			System.out.println("Not enough stocks to sell.");
 			return false ;
 		}
 		if(sellFlag){//stock present in portfolio and requested amount to sell is present as well
 			if(quantity == -1){//sell all stock quantity(and remove the stock..
-				this.updateBalance(this.stocksStatus[i].getStockQuantity() * this.stocksStatus[i].bid) ;//update balance
-				this.stocksStatus[i].setStockQuantity(0) ;//update quantity
+				this.updateBalance(this.stockStatus[i].getStockQuantity() * this.stockStatus[i].bid) ;//update balance
+				this.stockStatus[i].setStockQuantity(0) ;//update quantity
 			}
 			else{//sell requested quantity(stock remains in portfolio
-				this.updateBalance(quantity * this.stocksStatus[i].bid);
-				this.stocksStatus[i].setStockQuantity(this.stocksStatus[i].getStockQuantity()-quantity) ;//update quantity
+				this.updateBalance(quantity * this.stockStatus[i].bid);
+				this.stockStatus[i].setStockQuantity(this.stockStatus[i].getStockQuantity()-quantity) ;//update quantity
 			}	
 		}
 		return sellFlag;
@@ -254,11 +245,11 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			return flag ;
 		else{
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence/in-existence of stock 
-			if(symbol.equals(this.stocks[i].getSymbol())){
+			if(symbol.equals(this.stockStatus[i].getSymbol())){
 				flag = true;
 				break;
 			}
-		if((quantity * this.stocksStatus[i].getAsk() > this.balance)){
+		if((quantity * this.stockStatus[i].getAsk() > this.balance)){
 			System.out.println("Not enough balance to complete purchase.");
 			return false;
 		}
@@ -267,12 +258,12 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		
 		}
 		if(flag && quantity > 0){//stock exist, adding data
-			this.updateBalance(-1*(this.stocksStatus[i].getAsk()*quantity)) ;//update balance
-			this.stocksStatus[i].setStockQuantity(this.stocksStatus[i].getStockQuantity() + quantity);//update quantity
+			this.updateBalance(-1*(this.stockStatus[i].getAsk()*quantity)) ;//update balance
+			this.stockStatus[i].setStockQuantity(this.stockStatus[i].getStockQuantity() + quantity);//update quantity
 		}
 		else if(quantity == -1){
-			this.updateBalance((int)this.balance / this.stocksStatus[i].getAsk() * (this.stocksStatus[i].getAsk() * -1)) ;//update balance
-			this.stocksStatus[i].setStockQuantity(this.stocksStatus[i].getStockQuantity() + quantity);//update quantity
+			this.updateBalance((int)this.balance / this.stockStatus[i].getAsk() * (this.stockStatus[i].getAsk() * -1)) ;//update balance
+			this.stockStatus[i].setStockQuantity(this.stockStatus[i].getStockQuantity() + quantity);//update quantity
 		}
 			
 		
@@ -287,9 +278,9 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	public float getStocksValue(Portfolio portfolio){
 		float res = 0 ;
 		for(int i = 0; i < portfolioSize; i++){
-			if(this.stocksStatus[i] == null)
+			if(this.stockStatus[i] == null)
 				continue;
-			res += this.stocksStatus[i].getBid() * this.stocksStatus[i].getStockQuantity();
+			res += this.stockStatus[i].getBid() * this.stockStatus[i].getStockQuantity();
 		}
 			return res;
 	}

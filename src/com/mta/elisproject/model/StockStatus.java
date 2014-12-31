@@ -34,8 +34,9 @@ public class StockStatus extends Stock {
 		setStockQuantity(stockQuantity) ;
 	}
 	public StockStatus(StockStatus stockStatus){//copy c'tor
-		this(stockStatus.getBid(), stockStatus.getAsk(), stockStatus.getDate(), stockStatus.getSymbol(),
-				stockStatus.getRecommendation(), stockStatus.getStockQuantity() );
+		super(stockStatus.bid, stockStatus.ask, new Date(stockStatus.getDate().getTime()), stockStatus.symbol );
+	//	this(stockStatus.getBid(), stockStatus.getAsk(), stockStatus.getDate(), stockStatus.getSymbol(),
+		//		stockStatus.getRecommendation(), stockStatus.getStockQuantity() );
 	}
 	
 	public ALGO_RECOMMENDATION getRecommendation() {
