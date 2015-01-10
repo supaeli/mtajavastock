@@ -1,6 +1,11 @@
 package com.mta.elisproject.model;
-
 import java.util.Date;
+
+import com.mta.elisproject.exception.BalanceException;
+import com.mta.elisproject.exception.PortfolioFullException;
+import com.mta.elisproject.exception.StockAlreadyExist;
+import com.mta.elisproject.exception.StockNotExist;
+
 /**
  * 
  * @author sup4eli
@@ -52,13 +57,7 @@ public class Portfolio {
 		}
 	}
 	
-	private int getLogicalSizeStocks(Stock[] stocks){//add description later
-		int i =0 ;
-		while(stocks[i]!=null && i<MAX_PORTFOLIO_SIZE){
-			i++;
-		}
-		return i;//-1;//else i would be returning the spot AFTER last item position(on array)
-	}
+	
 	private int getLogicalSizeStatus(StockStatus[] OtherstockStatus){//add description later
 		int i =0 ;
 		while(OtherstockStatus[i]!=null && i<MAX_PORTFOLIO_SIZE){
@@ -66,36 +65,8 @@ public class Portfolio {
 		}
 		return i;//-1;
 	}
-	private void copyStocksArray(Stock[] stocks, int size){// combine two next func to one in the copy c'tor
-		
-		if(size > 0 && size<= MAX_PORTFOLIO_SIZE-1)//array is not full
-		{
-		for (int i = 0; i<size; i++){//len dont give logical(3) but physical(5)->find func!
-			this.addStock(stocks[i]);  
-		}
-		}
-		else{
-			
-		}
-		//this.stocks[i] = new Stock(stocks[i]) ;
-		  //this.portfolioSize++; 
-		  // does the same
-	}
-public void copyStockStatusArray(StockStatus[] stockStatus,int size){
-		
-		if(size >= 0 && size<= MAX_PORTFOLIO_SIZE-1)//array is not full and not pointing to null
-		{
-			for(int i =0 ;i <=size ;i++){	
-				this.stockStatus[i] = new StockStatus(stockStatus[i])  ;
-			}
-		}
-		else//array is full
-		{
-			//present array is full msg
-			return ;
-		}
-	}	
 	
+
 	public StockStatus[] getStockStatus(){
 		return this.stockStatus ;
 	}
@@ -119,11 +90,15 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		int i =0 ;
 		String resStr = new String() ;
 		resStr = "<h1>"+title+"</h1>" ;
+		resStr += "<br>" + "Total portfolio value " + "$" 
+		+ this.getTotalValue(this) +  ", Total stocks value " 
+		+ "$"  + this.getStocksValue(this) 
+		+ ", Balance " + "$" + this.getBalance() + "<br>" + "<h2>Stocks in portfolio :</h2> "  ;
 		while(stockStatus[i] != null && i < portfolioSize){
 			resStr = resStr + "<br>" + stockStatus[i].getHtmlDescription() ;// getHtmlDescription(stocks );// still cannot figure y cant i use noted method- get a 'not defined for type portfolio'->A: didn't approach stock.function, did just function which is wrong.
 			i++ ;
 		}
-		resStr = resStr + "<br>" + "Total portfolio value " + "$" + this.getTotalValue(this) +  ", Total stocks value " + "$"  + this.getStocksValue(this) + ", Balance " + "$" + this.getBalance()  ;
+		
 		return resStr; 
 	}
 	/**
@@ -131,12 +106,12 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	 * updates the related stock status field using the parameter data(e.g symbol, date, etc.)
 	 * @param stock - Stock object to add
 	 */
-	public void addStock(Stock stock) {
+	public void addStock (Stock stock) throws PortfolioFullException, StockAlreadyExist {// note to myself, this method using type Stock and not StockStatus.
 		int i;
 		for( i = 0; i < portfolioSize; i++ ){//validate in-existence of stock prior to the actual add action.
 			if(stock.getSymbol().equals(this.stockStatus[i].getSymbol())){
 				System.out.println("Stock already exist in the portfolio, cannot add it again ");
-				return;
+				throw new StockAlreadyExist(stock.getSymbol());
 			}	
 		}
 		
@@ -150,6 +125,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		else//array is full
 		{
 			System.out.println("Can't add new stock, portfolio can only have "+MAX_PORTFOLIO_SIZE+" stocks");
+			throw new PortfolioFullException();
 		}
 	}
 	
@@ -161,7 +137,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	 * @param stockSymbol used to locate the stock in stocks array
 	 * @return bool for success/failure
 	 */
-	public boolean removeStock(String stockSymbol){// means --> selling all quantity of stock
+	public void removeStock(String stockSymbol) throws StockNotExist {// means --> selling all quantity of stock
 		int i ;
 		boolean removeFlag = false ;
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock prior to the actual remove action.
@@ -169,16 +145,16 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 				removeFlag = true;
 				break;
 			}
-				
+		if(!removeFlag){// if stock does not exist
+			//print to console like addStock?
+			throw new StockNotExist(stockSymbol) ;
 		}
-		if(removeFlag){//proceed if stock existing in array
-			removeFlag = sellStock(stockSymbol, -1);//sell stock, validate operation was successful
-			if(removeFlag){//if in the above line flag became false - sellStock failed -->removeStock return false.
+		else {//proceed if stock existing in array
+			sellStock(stockSymbol, -1);//sell full quantity of stock
 				this.stockStatus[i] = this.stockStatus[portfolioSize] ;//remove from stockStatus[]
 				portfolioSize-- ;
 			}
 		}
-		return removeFlag ;
 	}
 	/**
 	 * 	method using to sell stocks, can sell all existing stocks with "-1" input to quantity.
@@ -187,37 +163,40 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	 * @param quantity amount of stocks wished to sell
 	 * @return bool for success/failure of operation
 	 */
-	public boolean sellStock(String stockSymbol, int quantity){// ignoring zero amount of stocks?
+	public void sellStock(String stockSymbol, int quantity) throws {// ignoring zero amount of stocks?
 		int i ;
 		int currentQuantity ;
 		boolean sellFlag = false ;
 		
 		if(quantity != -1 && quantity < 0)//negative quantity is not an option.
-			return false ;
+			//print negative quantity error msg/ create an exception.
 		
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock 
 			if(stockSymbol.equals(this.stockStatus[i].getSymbol())){
+				sellFlag = true;
 				break;
 			}
-			sellFlag = true;
 		}
-		
+		if(!sellFlag){
+			//print to console?
+			throw new StockNotExist(stockSymbol);
+		}
 		currentQuantity = this.stockStatus[i].getStockQuantity() ;
-		if(currentQuantity < quantity){
+		else if(currentQuantity < quantity){
 			System.out.println("Not enough stocks to sell.");
-			return false ;
+			//print msg/exception.
 		}
-		if(sellFlag){//stock present in portfolio and requested amount to sell is present as well
+		else {//stock present in portfolio and requested amount to sell is present as well
 			if(quantity == -1){//sell all stock quantity(and remove the stock..
 				this.updateBalance(this.stockStatus[i].getStockQuantity() * this.stockStatus[i].bid) ;//update balance
 				this.stockStatus[i].setStockQuantity(0) ;//update quantity
+				removeStock(stockStatus[i].getSymbol());
 			}
-			else{//sell requested quantity(stock remains in portfolio
+			else{//sell requested quantity(stock remains in portfolio)
 				this.updateBalance(quantity * this.stockStatus[i].bid);
 				this.stockStatus[i].setStockQuantity(this.stockStatus[i].getStockQuantity()-quantity) ;//update quantity
 			}	
 		}
-		return sellFlag;
 	}
 	/**
 	 * 
@@ -234,7 +213,7 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 	 * @param quantity
 	 * @return
 	 */
-	public boolean buyStock(String symbol, int quantity){
+	public void buyStock (String symbol, int quantity) throws BalanceException, PortfolioFullException, StockNotExist{
 		int i ;
 		boolean flag = false; 
 		
@@ -242,22 +221,23 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 		
 		//create stockStatus object according to the new stock-in case of need
 		if(quantity < 0 && quantity != -1)// validate input
-			return flag ;
+			System.out.println("error, negative quantity.");
+			//print msg/exception for negative quantity
 		else{
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence/in-existence of stock 
 			if(symbol.equals(this.stockStatus[i].getSymbol())){
 				flag = true;
 				break;
 			}
-		if((quantity * this.stockStatus[i].getAsk() > this.balance)){
+		if((quantity * this.stockStatus[i].getAsk() > this.balance)){//not enough credit for purchase
 			System.out.println("Not enough balance to complete purchase.");
-			return false;
+			throw new BalanceException() ;
 		}
 				
 		//check if balance fit request, later
 		
 		}
-		if(flag && quantity > 0){//stock exist, adding data
+		if(flag && quantity > 0){//stock exist, enough credit available.
 			this.updateBalance(-1*(this.stockStatus[i].getAsk()*quantity)) ;//update balance
 			this.stockStatus[i].setStockQuantity(this.stockStatus[i].getStockQuantity() + quantity);//update quantity
 		}
@@ -271,8 +251,8 @@ public void copyStockStatusArray(StockStatus[] stockStatus,int size){
 			//cannot implement at current time, need to get stock details 
 			//from unavailable source(JSON, web page , etc.)
 			//portfolioSize++;
+			//here program will throw portfolioFullException or StockNotExist exception.  
 		}
-		return flag;
 		}
 	}
 	public float getStocksValue(Portfolio portfolio){
