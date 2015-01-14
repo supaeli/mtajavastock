@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mta.elisproject.exception.BalanceException;
+import com.mta.elisproject.exception.PortfolioFullException;
+import com.mta.elisproject.exception.StockAlreadyExist;
+import com.mta.elisproject.exception.StockNotExist;
 import com.mta.elisproject.model.*;
-
 import com.mta.elisproject.service.PortfolioService ;
 /**
 <<<<<<< HEAD
@@ -31,11 +34,25 @@ public class PortfolioServlet extends HttpServlet{
 			throws ServletException, IOException {
 		
 		PortfolioService portfolioService = new PortfolioService() ;
-		Portfolio portfolio1 = portfolioService.getPortfolio() ;
-		
-		
+		Portfolio portfolio1;
+		try {
+			portfolio1 = portfolioService.getPortfolio();
+		//	resp.getWriter().println(portfolio1.getHtmlString());//print #1
+		} catch (BalanceException e) {
+			// TODO Auto-generated catch block
+			resp.getWriter().println(e.getMessage());
+		} catch (PortfolioFullException e) {
+			// TODO Auto-generated catch block
+			resp.getWriter().println(e.getMessage());
+		} catch (StockAlreadyExist e) {
+			// TODO Auto-generated catch block
+			resp.getWriter().println(e.getMessage());
+		} catch (StockNotExist e) {
+		// TODO Auto-generated catch block
+		resp.getWriter().println(e.getMessage());
+		}
 		resp.setContentType("text/html");
-		resp.getWriter().println(portfolio1.getHtmlString());//print #1
+		
 		
 		
 	}

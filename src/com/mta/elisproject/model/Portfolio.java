@@ -28,45 +28,32 @@ public class Portfolio {
 	public Portfolio (){
 		setTitle("Portfolio #1");
 		 stockStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
-		  if(getLogicalSizeStatus(stockStatus) > 0 && getLogicalSizeStatus(stockStatus)<= MAX_PORTFOLIO_SIZE-1){ //array is not full, figure this if statement ! ! !	
-				int logicalSizeStocks = getLogicalSizeStatus(stockStatus);
-				for (int i = 0; i<logicalSizeStocks; i++){
+		/*  if(getLogicalSizeStatus(stockStatus) > 0 && getLogicalSizeStatus(stockStatus)<= MAX_PORTFOLIO_SIZE-1){ //array is not full, figure this if statement ! ! !	
+				int logicalSizeStocks = getLogicalSizeStatus(stockStatus);*/
+				/*for (int i = 0; i<logicalSizeStocks; i++){
 					this.addStock(stockStatus[i]) ;  
 					stockStatus[i] = new StockStatus() ;
-				}
-			}
-		 
+				}*/
 	}
 	
-	public Portfolio (Portfolio portfolio) {//copy c'tor
+	public Portfolio (Portfolio portfolio)throws PortfolioFullException,StockAlreadyExist {//copy c'tor
 		this(portfolio.getTitle(), portfolio.getStockStatus()) ; 
 		
 	}
-	public Portfolio(String title,StockStatus[] stockStatusP){// c'tor non-empty
+	public Portfolio(String title,StockStatus[] stockStatusP)throws PortfolioFullException, StockAlreadyExist{// c'tor non-empty
 		
 		setTitle(title);
 		this.stockStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
 	    
-	     if(getLogicalSizeStatus(stockStatus) > 0 && getLogicalSizeStatus(stockStatus)<= MAX_PORTFOLIO_SIZE-1)//array is not full
+	     if(portfolioSize > 0 && portfolioSize<= MAX_PORTFOLIO_SIZE-1)//array is not full
 		{
-			int logicalSizeStocks = getLogicalSizeStatus(stockStatus);
-			for (int i = 0; i<logicalSizeStocks; i++){
+			for (int i = 0; i<portfolioSize; i++){
 				this.addStock(stockStatus[i]) ;  
 				//stocksStatus[i] = new StockStatus(stockStatusP[i]) ;//fix it
 			}
 		}
 	}
 	
-	
-	private int getLogicalSizeStatus(StockStatus[] OtherstockStatus){//add description later
-		int i =0 ;
-		while(OtherstockStatus[i]!=null && i<MAX_PORTFOLIO_SIZE){
-			i++;
-		}
-		return i;//-1;
-	}
-	
-
 	public StockStatus[] getStockStatus(){
 		return this.stockStatus ;
 	}
@@ -137,7 +124,7 @@ public class Portfolio {
 	 * @param stockSymbol used to locate the stock in stocks array
 	 * @return bool for success/failure
 	 */
-	public void removeStock(String stockSymbol) throws StockNotExist {// means --> selling all quantity of stock
+	public void removeStock(String stockSymbol) throws StockNotExist,BalanceException {// means --> selling all quantity of stock
 		int i ;
 		boolean removeFlag = false ;
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock prior to the actual remove action.
@@ -150,7 +137,7 @@ public class Portfolio {
 			throw new StockNotExist(stockSymbol) ;
 		}
 		else {//proceed if stock existing in array
-			sellStock(stockSymbol, -1);//sell full quantity of stock
+				sellStock(stockSymbol, -1);//sell full quantity of stock
 				this.stockStatus[i] = this.stockStatus[portfolioSize] ;//remove from stockStatus[]
 				portfolioSize-- ;
 			}
@@ -163,13 +150,14 @@ public class Portfolio {
 	 * @param quantity amount of stocks wished to sell
 	 * @return bool for success/failure of operation
 	 */
-	public void sellStock(String stockSymbol, int quantity) throws {// ignoring zero amount of stocks?
+	public void sellStock(String stockSymbol, int quantity) throws BalanceException,StockNotExist {// ignoring zero amount of stocks?
 		int i ;
 		int currentQuantity ;
 		boolean sellFlag = false ;
 		
 		if(quantity != -1 && quantity < 0)//negative quantity is not an option.
 			//print negative quantity error msg/ create an exception.
+			throw new BalanceException();
 		
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock 
 			if(stockSymbol.equals(this.stockStatus[i].getSymbol())){
@@ -178,13 +166,11 @@ public class Portfolio {
 			}
 		}
 		if(!sellFlag){
-			//print to console?
 			throw new StockNotExist(stockSymbol);
 		}
-		currentQuantity = this.stockStatus[i].getStockQuantity() ;
-		else if(currentQuantity < quantity){
+		else if( this.stockStatus[i].getStockQuantity() < quantity){
 			System.out.println("Not enough stocks to sell.");
-			//print msg/exception.
+			throw new StockNotExist(stockSymbol);
 		}
 		else {//stock present in portfolio and requested amount to sell is present as well
 			if(quantity == -1){//sell all stock quantity(and remove the stock..

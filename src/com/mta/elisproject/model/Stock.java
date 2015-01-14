@@ -71,10 +71,6 @@ public class Stock {
 		symbol =new String(assignedSymbol);
 	}
 	/**
-<<<<<<< HEAD
-=======
-	 * 
->>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
 	 *
 	 * @return html string presentation of mentioned above stock states
 	 */
