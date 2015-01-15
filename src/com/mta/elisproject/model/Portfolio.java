@@ -132,6 +132,7 @@ public class Portfolio {
 				removeFlag = true;
 				break;
 			}
+		}
 		if(!removeFlag){// if stock does not exist
 			//print to console like addStock?
 			throw new StockNotExist(stockSymbol) ;
@@ -141,8 +142,8 @@ public class Portfolio {
 				this.stockStatus[i] = this.stockStatus[portfolioSize] ;//remove from stockStatus[]
 				portfolioSize-- ;
 			}
-		}
 	}
+	
 	/**
 	 * 	method using to sell stocks, can sell all existing stocks with "-1" input to quantity.
 	 * if so, it also removes the stock from both stocks and stock status arrays.
@@ -173,10 +174,10 @@ public class Portfolio {
 			throw new StockNotExist(stockSymbol);
 		}
 		else {//stock present in portfolio and requested amount to sell is present as well
-			if(quantity == -1){//sell all stock quantity(and remove the stock..
+			if(quantity == -1){//sell all stock quantity
 				this.updateBalance(this.stockStatus[i].getStockQuantity() * this.stockStatus[i].bid) ;//update balance
 				this.stockStatus[i].setStockQuantity(0) ;//update quantity
-				removeStock(stockStatus[i].getSymbol());
+				//removeStock(stockStatus[i].getSymbol());//not supposed to removev it! cause recurrence sell-remove-sell
 			}
 			else{//sell requested quantity(stock remains in portfolio)
 				this.updateBalance(quantity * this.stockStatus[i].bid);
@@ -200,21 +201,24 @@ public class Portfolio {
 	 * @return
 	 */
 	public void buyStock (String symbol, int quantity) throws BalanceException, PortfolioFullException, StockNotExist{
-		int i ;
+		int i = 0;
 		boolean flag = false; 
 		
 		
 		
 		//create stockStatus object according to the new stock-in case of need
-		if(quantity < 0 && quantity != -1)// validate input
+		if(quantity < 0 && quantity != -1){// validate input
 			System.out.println("error, negative quantity.");
-			//print msg/exception for negative quantity
+			throw new BalanceException();
+		}
 		else{
-		for(i = 0; i < this.portfolioSize; i++ ){//validate existence/in-existence of stock 
-			if(symbol.equals(this.stockStatus[i].getSymbol())){
+			for(i = 0; i < this.portfolioSize; i++ ){//validate existence/in-existence of stock 
+				if(symbol.equals(this.stockStatus[i].getSymbol())){
 				flag = true;
 				break;
+				}
 			}
+		}
 		if((quantity * this.stockStatus[i].getAsk() > this.balance)){//not enough credit for purchase
 			System.out.println("Not enough balance to complete purchase.");
 			throw new BalanceException() ;
@@ -222,7 +226,7 @@ public class Portfolio {
 				
 		//check if balance fit request, later
 		
-		}
+		
 		if(flag && quantity > 0){//stock exist, enough credit available.
 			this.updateBalance(-1*(this.stockStatus[i].getAsk()*quantity)) ;//update balance
 			this.stockStatus[i].setStockQuantity(this.stockStatus[i].getStockQuantity() + quantity);//update quantity
@@ -239,8 +243,8 @@ public class Portfolio {
 			//portfolioSize++;
 			//here program will throw portfolioFullException or StockNotExist exception.  
 		}
-		}
 	}
+	
 	public float getStocksValue(Portfolio portfolio){
 		float res = 0 ;
 		for(int i = 0; i < portfolioSize; i++){

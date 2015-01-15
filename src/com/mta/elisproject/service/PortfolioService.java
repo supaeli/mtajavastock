@@ -8,17 +8,10 @@ import com.mta.elisproject.exception.StockAlreadyExist;
 import com.mta.elisproject.exception.StockNotExist;
 import com.mta.elisproject.model.*;
 /**
-<<<<<<< HEAD
- * @author sup4eli
- * Portfolio 'process' class, manipulates data in 
- * a portfolio
-=======
- * 
  * @author sup4eli
  * Portfolio 'process' class, manipulates data in 
  * aportfolio
  *
->>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
  */
 public class PortfolioService  {
 	
@@ -39,18 +32,20 @@ public class PortfolioService  {
 	Stock stock1 = new Stock(8.5f, 10f, date, "PIH" );//data from exe details) ;
 	Stock stock2 = new Stock(25.5f, 30f, date, "AAL");//data from exe details) ;
 	Stock stock3 = new Stock(15.5f, 20f, date, "CAAS");//data from exe details) ;
-	
+	Stock stock4 = new Stock(15.5f, 20f, date, "CqAS");
+	Stock stock5 = new Stock(15.5f, 20f, date, "2AAS");
+	Stock stock6 = new Stock(15.5f, 20f, date, "1CAAS");
 	
 		myPortfolio.addStock(stock1);
 		myPortfolio.addStock(stock2);
 		myPortfolio.addStock(stock3);
-		myPortfolio.buyStock("PIH", 20) ;
+		/*myPortfolio.buyStock("PIH", 20) ;
 		myPortfolio.buyStock("AAL", 30) ;
 		myPortfolio.buyStock("CAAS", 40) ;
 		myPortfolio.sellStock("AAL", -1) ;
-		myPortfolio.removeStock("CAAS") ;
+		myPortfolio.removeStock("CAAS") ;*/
 		myPortfolio.addStock(stock3);
-	
+		
 	
 	return myPortfolio;
 	
