@@ -1,10 +1,11 @@
 package com.mta.elisproject.model;
 import java.util.Date;
+import java.util.List;
 
 import com.mta.elisproject.exception.BalanceException;
 import com.mta.elisproject.exception.PortfolioFullException;
-import com.mta.elisproject.exception.StockAlreadyExist;
-import com.mta.elisproject.exception.StockNotExist;
+import com.mta.elisproject.exception.StockAlreadyExistsException;
+import com.mta.elisproject.exception.StockNotExistsException;
 
 /**
  * 
@@ -17,8 +18,8 @@ import com.mta.elisproject.exception.StockNotExist;
  *
  */
 public class Portfolio {
-	final static int MAX_PORTFOLIO_SIZE = 5 ;
-	enum ALGO_RECOMMENDATION{DO_NOTHING,BUY, SELL};
+	public final static int MAX_PORTFOLIO_SIZE = 5 ;
+	public enum ALGO_RECOMMENDATION{DO_NOTHING,BUY, SELL};
 	private String title ;
 	private StockStatus[] stockStatus ; 
 	private int portfolioSize = 0 ;
@@ -36,11 +37,11 @@ public class Portfolio {
 				}*/
 	}
 	
-	public Portfolio (Portfolio portfolio)throws PortfolioFullException,StockAlreadyExist {//copy c'tor -WHAT DO I NEED TO DO WITH UNHANDLED EXCEPTION?
-		this(portfolio.getTitle(), portfolio.getStockStatus()) ; 
+	public Portfolio (Portfolio portfolio)throws PortfolioFullException,StockAlreadyExistsException {//copy c'tor -WHAT DO I NEED TO DO WITH UNHANDLED EXCEPTION?
+		this(portfolio.getTitle(), portfolio.getStocks()) ; 
 		
 	}
-	public Portfolio(String title,StockStatus[] stockStatusP)throws PortfolioFullException, StockAlreadyExist{// c'tor non-empty
+	public Portfolio(String title,StockStatus[] stockStatusP)throws PortfolioFullException, StockAlreadyExistsException{// c'tor non-empty
 		
 		setTitle(title);
 		this.stockStatus = new StockStatus[MAX_PORTFOLIO_SIZE] ;
@@ -53,8 +54,15 @@ public class Portfolio {
 			}
 		}
 	}
+	public Portfolio (List<StockStatus> stockStatus) throws StockAlreadyExistsException,PortfolioFullException{
+		this();
+		for (int i = 0; i < stockStatus.size(); i++) {
+			this.stockStatus[i] = stockStatus.get(i);
+			this.portfolioSize++;
+		}
+	}
 	
-	public StockStatus[] getStockStatus(){
+	public StockStatus[] getStocks(){
 		return this.stockStatus ;
 	}
 	public String getTitle(){
@@ -93,12 +101,12 @@ public class Portfolio {
 	 * updates the related stock status field using the parameter data(e.g symbol, date, etc.)
 	 * @param stock - Stock object to add
 	 */
-	public void addStock (Stock stock) throws PortfolioFullException, StockAlreadyExist {// note to myself, this method using type Stock and not StockStatus.
+	public void addStock (Stock stock) throws PortfolioFullException, StockAlreadyExistsException {// note to myself, this method using type Stock and not StockStatus.
 		int i;
 		for( i = 0; i < portfolioSize; i++ ){//validate in-existence of stock prior to the actual add action.
 			if(stock.getSymbol().equals(this.stockStatus[i].getSymbol())){
 				System.out.println("Stock already exist in the portfolio, cannot add it again ");
-				throw new StockAlreadyExist(stock.getSymbol());
+				throw new StockAlreadyExistsException(stock.getSymbol());
 			}	
 		}
 		
@@ -124,7 +132,7 @@ public class Portfolio {
 	 * @param stockSymbol used to locate the stock in stocks array
 	 * @return bool for success/failure
 	 */
-	public void removeStock(String stockSymbol) throws StockNotExist,BalanceException {// means --> selling all quantity of stock
+	public void removeStock(String stockSymbol) throws StockNotExistsException,BalanceException {// means --> selling all quantity of stock
 		int i ;
 		boolean removeFlag = false ;
 		for(i = 0; i < this.portfolioSize; i++ ){//validate existence of stock prior to the actual remove action.
@@ -134,7 +142,7 @@ public class Portfolio {
 			}
 		if(!removeFlag){// if stock does not exist
 			//print to console like addStock?
-			throw new StockNotExist(stockSymbol) ;
+			throw new StockNotExistsException(stockSymbol) ;
 		}
 		else {//proceed if stock existing in array
 				sellStock(stockSymbol, -1);//sell full quantity of stock
@@ -150,7 +158,7 @@ public class Portfolio {
 	 * @param quantity amount of stocks wished to sell
 	 * @return bool for success/failure of operation
 	 */
-	public void sellStock(String stockSymbol, int quantity) throws BalanceException,StockNotExist {// ignoring zero amount of stocks?
+	public void sellStock(String stockSymbol, int quantity) throws BalanceException,StockNotExistsException {// ignoring zero amount of stocks?
 		int i ;
 		int currentQuantity ;
 		boolean sellFlag = false ;
@@ -166,11 +174,11 @@ public class Portfolio {
 			}
 		}
 		if(!sellFlag){
-			throw new StockNotExist(stockSymbol);
+			throw new StockNotExistsException(stockSymbol);
 		}
 		else if( this.stockStatus[i].getStockQuantity() < quantity){
 			System.out.println("Not enough stocks to sell.");
-			throw new StockNotExist(stockSymbol);
+			throw new StockNotExistsException(stockSymbol);
 		}
 		else {//stock present in portfolio and requested amount to sell is present as well
 			if(quantity == -1){//sell all stock quantity(and remove the stock..
@@ -199,7 +207,7 @@ public class Portfolio {
 	 * @param quantity
 	 * @return
 	 */
-	public void buyStock (String symbol, int quantity) throws BalanceException, StockNotExist{
+	public void buyStock (String symbol, int quantity) throws BalanceException, StockNotExistsException{
 		int i ;
 		boolean flag = false; 
 		
@@ -257,6 +265,16 @@ public class Portfolio {
 		float res = 0 ;
 		res = portfolio.getBalance() + portfolio.getStocksValue(portfolio) ;
 		return res ;
+	}
+	public int findBySymbol(String s){
+		int i = 0;
+		for(;this.stockStatus[i].getSymbol().equalsIgnoreCase(s) && i<this.portfolioSize 
+					&& i<MAX_PORTFOLIO_SIZE;i++){
+			
+		}
+		if(i >= this.portfolioSize && i >= MAX_PORTFOLIO_SIZE)
+			i= -1;//means position not found
+		return i;
 	}
 	
 }

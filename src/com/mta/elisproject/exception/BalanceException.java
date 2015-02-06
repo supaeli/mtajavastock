@@ -1,13 +1,15 @@
 package com.mta.elisproject.exception;
 
-/**
- * notifies about balance and Quantity exceptions!
- * @author elay1_000
- *
- */
 public class BalanceException extends Exception {
-	public BalanceException (){
-		super("Balance exception.") ;
+
+	private static final long serialVersionUID = 1L;
+	
+	public BalanceException() {
+		super("Out of balance!");
 	}
 	
+	public BalanceException(String message) {
+		super(message);
+	}
+
 }
