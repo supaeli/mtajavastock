@@ -36,7 +36,7 @@ public class Portfolio {
 				}*/
 	}
 	
-	public Portfolio (Portfolio portfolio)throws PortfolioFullException,StockAlreadyExist {//copy c'tor
+	public Portfolio (Portfolio portfolio)throws PortfolioFullException,StockAlreadyExist {//copy c'tor -WHAT DO I NEED TO DO WITH UNHANDLED EXCEPTION?
 		this(portfolio.getTitle(), portfolio.getStockStatus()) ; 
 		
 	}
@@ -199,7 +199,7 @@ public class Portfolio {
 	 * @param quantity
 	 * @return
 	 */
-	public void buyStock (String symbol, int quantity) throws BalanceException, PortfolioFullException, StockNotExist{
+	public void buyStock (String symbol, int quantity) throws BalanceException, StockNotExist{
 		int i ;
 		boolean flag = false; 
 		
