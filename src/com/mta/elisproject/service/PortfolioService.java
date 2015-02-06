@@ -21,7 +21,14 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
+<<<<<<< HEAD
  * @author hanan.gitliz@gmail.com
+=======
+ * @author sup4eli
+ * Portfolio 'process' class, manipulates data in 
+ * aportfolio
+ *
+>>>>>>> 3b35c5c71645918327c4e0c1024bb16d2df20f2f
  */
 public class PortfolioService {
 	
@@ -83,6 +90,7 @@ public class PortfolioService {
 		}
 	}
 	
+<<<<<<< HEAD
 	public PortfolioTotalStatus[] getPortfolioTotalStatus () throws StockAlreadyExistsException, PortfolioFullException {
 		
 		Portfolio portfolio = getPortfolio();
@@ -162,6 +170,25 @@ public class PortfolioService {
 			flush();
 		}
 	}
+=======
+	Stock stock1 = new Stock(8.5f, 10f, date, "PIH" );//data from exe details) ;
+	Stock stock2 = new Stock(25.5f, 30f, date, "AAL");//data from exe details) ;
+	Stock stock3 = new Stock(15.5f, 20f, date, "CAAS");//data from exe details) ;
+	Stock stock4 = new Stock(15.5f, 20f, date, "CqAS");
+	Stock stock5 = new Stock(15.5f, 20f, date, "2AAS");
+	Stock stock6 = new Stock(15.5f, 20f, date, "1CAAS");
+	
+		myPortfolio.addStock(stock1);
+		myPortfolio.addStock(stock2);
+		myPortfolio.addStock(stock3);
+		/*myPortfolio.buyStock("PIH", 20) ;
+		myPortfolio.buyStock("AAL", 30) ;
+		myPortfolio.buyStock("CAAS", 40) ;
+		myPortfolio.sellStock("AAL", -1) ;
+		myPortfolio.removeStock("CAAS") ;*/
+		myPortfolio.addStock(stock3);
+		
+>>>>>>> 3b35c5c71645918327c4e0c1024bb16d2df20f2f
 	
 	public void buyStock(String symbol, int quantity) throws BalanceException, StockNotExistsException, StockAlreadyExistsException, PortfolioFullException {
 		getPortfolio().buyStock(symbol, quantity);

@@ -1,6 +1,5 @@
 package com.mta.elisproject.model ;
 import java.util.Date ;
-//<<<<<<< HEAD
 //import java.text.SimpleDateFormat;
 /**
  * 
@@ -10,8 +9,7 @@ import java.util.Date ;
  * as presented in the stock market.
  *
  */
-//=======
-//import java.text.SimpleDateFormat;
+
 
 /**
  * 
@@ -22,7 +20,7 @@ import java.util.Date ;
  *
  */
 
-//>>>>>>> branch 'master' of https://github.com/supaeli/mtajavastock.git
+
 public class Stock {
 	protected float bid ;
 	protected float ask ;
