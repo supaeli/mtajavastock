@@ -36,7 +36,7 @@ public class PortfolioEditServlet extends AbstractAlgoServlet {
 		} catch (PortfolioFullException e) {
 			resp.getWriter().print(e.getMessage());
 		}
-		StockStatus[] stockStatusArray = portfolio.getStocks();
+		StockStatus[] stockStatusArray = portfolio.getStockStatus();
 		List<StockStatus> stockStatusList = new ArrayList<>();
 		for (StockStatus ss : stockStatusArray) {
 			if(ss != null)
@@ -45,7 +45,7 @@ public class PortfolioEditServlet extends AbstractAlgoServlet {
 
 		PortfolioEditDto ret = new PortfolioEditDto();
 		ret.setTitle(portfolio.getTitle());
-		ret.setBalance(portfolio.getBalance());
+		ret.setBalance(portfolio.getbalance());
 		ret.setStockStatusList(stockStatusList);
 
 		resp.getWriter().print(withNullObjects().toJson(ret));

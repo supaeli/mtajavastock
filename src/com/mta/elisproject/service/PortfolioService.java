@@ -67,7 +67,7 @@ public class PortfolioService {
 	 * @throws StockAlreadyExistsException 
 	 */
 	public void update() throws StockAlreadyExistsException, PortfolioFullException {
-		StockStatus[] stocks = getPortfolio().getStocks();
+		StockStatus[] stocks = getPortfolio().getStockStatus();
 		List<String> symbols = new ArrayList<>(Portfolio.MAX_PORTFOLIO_SIZE);
 		for (StockStatus stockStatus : stocks) {
 			symbols.add(stockStatus.getSymbol());
@@ -90,14 +90,13 @@ public class PortfolioService {
 		}
 	}
 	
-<<<<<<< HEAD
 	public PortfolioTotalStatus[] getPortfolioTotalStatus () throws StockAlreadyExistsException, PortfolioFullException {
 		
 		Portfolio portfolio = getPortfolio();
 		Map<Date, Float> map = new HashMap<>();
 		
 		//get stock status from db.
-		Stock[] stocks = portfolio.getStocks();
+		Stock[] stocks = portfolio.getStockStatus();
 		for (int i = 0; i < stocks.length; i++) {
 			Stock stock = stocks[i];
 			
@@ -165,30 +164,12 @@ public class PortfolioService {
 			portfolio.addStock(stock);
 			
 			//second thing, save the new stock to the database.
-			datastoreService.saveStock(portfolio.getStocks()[ portfolio.findBySymbol(symbol)]);
+			datastoreService.saveStock(portfolio.getStockStatus()[ portfolio.findStock(symbol)]);
 			
 			flush();
 		}
 	}
-=======
-	Stock stock1 = new Stock(8.5f, 10f, date, "PIH" );//data from exe details) ;
-	Stock stock2 = new Stock(25.5f, 30f, date, "AAL");//data from exe details) ;
-	Stock stock3 = new Stock(15.5f, 20f, date, "CAAS");//data from exe details) ;
-	Stock stock4 = new Stock(15.5f, 20f, date, "CqAS");
-	Stock stock5 = new Stock(15.5f, 20f, date, "2AAS");
-	Stock stock6 = new Stock(15.5f, 20f, date, "1CAAS");
-	
-		myPortfolio.addStock(stock1);
-		myPortfolio.addStock(stock2);
-		myPortfolio.addStock(stock3);
-		/*myPortfolio.buyStock("PIH", 20) ;
-		myPortfolio.buyStock("AAL", 30) ;
-		myPortfolio.buyStock("CAAS", 40) ;
-		myPortfolio.sellStock("AAL", -1) ;
-		myPortfolio.removeStock("CAAS") ;*/
-		myPortfolio.addStock(stock3);
-		
->>>>>>> 3b35c5c71645918327c4e0c1024bb16d2df20f2f
+
 	
 	public void buyStock(String symbol, int quantity) throws BalanceException, StockNotExistsException, StockAlreadyExistsException, PortfolioFullException {
 		getPortfolio().buyStock(symbol, quantity);

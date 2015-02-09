@@ -47,11 +47,6 @@ public class DatastoreService {
 	private static final String NAMESPACE_STOCK = "stock";
 	private static final String NAMESPACE_STOCK_SYMBOL = "stock_symbol";
 
-	private static final String NAMESPACE_ACCOUNT = "account";
-	private static final String BALANCE = "balance";
-	private static final String PASSWORD = "password";
-	private static final String USERNAME = "username";
-
 	private static final String NAMESPACE_PORTFOLIO = "portfolio";
 	private static final String TITLE = "title";
 	private static final String PORTFOLIO_BALANCE = "balance";
@@ -256,7 +251,7 @@ public class DatastoreService {
 
 	public void updatePortfolio(Portfolio portfolio) {
 		updateEntity(portfolioToEntity(portfolio));
-		updateStocks(Lists.newArrayList(portfolio.getStocks()));
+		updateStocks(Lists.newArrayList(portfolio.getStockStatus()));
 	}
 
 	private void updateEntity(Entity entity) {
@@ -304,9 +299,9 @@ public class DatastoreService {
 	private Entity portfolioToEntity(Portfolio portfolio) {
 		Entity entity = new Entity(NAMESPACE_PORTFOLIO, 1);
 		entity.setProperty(TITLE, portfolio.getTitle());
-		entity.setProperty(PORTFOLIO_BALANCE, portfolio.getBalance());
+		entity.setProperty(PORTFOLIO_BALANCE, portfolio.getbalance());
 
-		Stock[] stocks = portfolio.getStocks();
+		Stock[] stocks = portfolio.getStockStatus();
 		List<String> symbols = new ArrayList<>();
 		for (int i = 0; i < stocks.length; i++) {
 
