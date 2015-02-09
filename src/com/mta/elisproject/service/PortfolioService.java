@@ -21,14 +21,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
-<<<<<<< HEAD
  * @author hanan.gitliz@gmail.com
 =======
  * @author sup4eli
  * Portfolio 'process' class, manipulates data in 
- * aportfolio
+ * a portfolio
  *
->>>>>>> 3b35c5c71645918327c4e0c1024bb16d2df20f2f
  */
 public class PortfolioService {
 	
@@ -164,7 +162,7 @@ public class PortfolioService {
 			portfolio.addStock(stock);
 			
 			//second thing, save the new stock to the database.
-			datastoreService.saveStock(portfolio.getStockStatus()[ portfolio.findStock(symbol)]);
+			datastoreService.saveStock(portfolio.getStockStatus()[ portfolio.findStockPositionBySymbol(symbol)]);
 			
 			flush();
 		}

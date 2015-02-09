@@ -13,37 +13,25 @@ import com.mta.elisproject.exception.StockNotExistsException;
  * @author sup4eli
  * a portfolio of Stock instances, holds 
  * multiple Stock objects
- * can add stock to a portfolio, present 
+ * can add stock(stockstatus) to a portfolio, present 
  * the whole portfolio in html string 
- * and has inner class for stock status, explained below.
+ * 
  *
  */
 public class Portfolio {
 	public enum ALGO_RECOMMENDATION {DO_NOTHING,BUY,SELL};
-	public final static int MAX_PORTFOLIO_SIZE= 5;//max size of stocks
-	public int portfolioSize = 0;// current head
-	private String title;// the title of the Portfolio (currently not defined )
+	public final static int MAX_PORTFOLIO_SIZE= 5;
+	public int portfolioSize = 0;
+	private String title;
 	private StockStatus[] stocksStatus;
 	private float balance;
-	//-----------------------------------------------------Contractor------------------------
-	/**
-	 * build a Stock's array
-	 * build a StockStatus array
-	 *
-	 */
+	
 	public Portfolio (){
 		this.stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE];
 		setTitle("sup4eli's portfolio biatch");
 		setBalance(0);
 	}
-	/**
-	 *
-	 * @param title - the Portfolio title
-	 * @param stocks - an Array of stocks
-	 * @param stocksStatus - unknow use at the moment
-	 * @throws StockAlreadyExistsException
-	 * @throws PortfolioFullException
-	 */
+	
 	public Portfolio (String title,StockStatus[] stocksStatus) throws StockAlreadyExistsException, PortfolioFullException{
 		this.stocksStatus = new StockStatus[MAX_PORTFOLIO_SIZE];
 		setTitle("Portfolio ");
@@ -55,12 +43,7 @@ public class Portfolio {
 			throw e;
 		}
 	}
-	/**
-	 * copy constractor
-	 * @param otherPortfolio
-	 * @throws PortfolioFullException
-	 * @throws StockAlreadyExistsException
-	 */
+	
 	public Portfolio (Portfolio otherPortfolio) throws StockAlreadyExistsException, PortfolioFullException{
 		this (otherPortfolio.getTitle(),otherPortfolio.getStockStatus());
 	}
@@ -71,14 +54,8 @@ public class Portfolio {
 			this.portfolioSize++;
 		}
 	}
-	//-----------------------------------------------------------Methods------------------------
-	/**
-	 * this is an internal method that is use in the copy Constaractor
-	 *
-	 * @param stocks
-	 * @param i
-	 * @return integer - the real size of the Stock[] array
-	 */
+	//methods laid down here
+	
 	private int checkRealSizeOfStockArray(StockStatus[] stocksStatus,int i){
 		i=0;
 		while (stocksStatus[i]!=null)
@@ -92,63 +69,50 @@ public class Portfolio {
 	}
 	/**
 	 *
-	 * @param OtherSymbol
-	 * @return -1 if not found / int pos - position that found
+	 * returns int as the position of desired stock, otherwise return -1.
 	 */
-	public int findStock (String OtherSymbol)
+	public int findStockPositionBySymbol (String s)
 	{
 		int i = 0 ;
-		for (;!this.stocksStatus[i].getSymbol().equalsIgnoreCase(OtherSymbol) && i<this.portfolioSize && i<MAX_PORTFOLIO_SIZE ; i++ ){ }
+		for (;!this.stocksStatus[i].getSymbol().equalsIgnoreCase(s) && i<this.portfolioSize && i<MAX_PORTFOLIO_SIZE ; i++ ){ }
 		if (i>=this.portfolioSize && i>=MAX_PORTFOLIO_SIZE){
-			i=-1;//Not fount
+			i=-1;
 		}
-		return i;//the position
+		return i;
 	}
-	/**
-	 *
-	 * @param OtherSymbol
-	 * @return True-success / false unsuccess
-	 */
-	public void removeStock (String OtherSymbol ) throws StockNotExistsException{
-		int num = findStock(OtherSymbol);
+	
+	public void removeStock (String s ) throws StockNotExistsException{
+		int num = findStockPositionBySymbol(s);
 		if (num == -1)
 		{
-			System.out.println("Erorr - not found");
-			throw new StockNotExistsException(OtherSymbol);
+			System.out.println("stock not found");
+			throw new StockNotExistsException(s);
 		}
 		else{
 			try{
-				this.sellStock(OtherSymbol,-1); //sell all
+				this.sellStock(s,-1); 
 			}
 			catch (StockNotExistsException e) {
 				throw e;
 			}
-			stocksStatus[num]=stocksStatus[portfolioSize-1]; //stocks[i] = LAST ,
-			stocksStatus[portfolioSize-1]=null;// last=null
+			stocksStatus[num]=stocksStatus[portfolioSize-1];
+			stocksStatus[portfolioSize-1]=null;
 			portfolioSize--;
 		}
 	}
-	/**
-	 *
-	 *
-	 * @param OtherSymbol
-	 * @param quantity
-	 * @return True-success sell / false unsuccess sell
-	 */
-	public void sellStock(String OtherSymbol ,int quantity) throws StockNotExistsException{
+	
+	public void sellStock(String s ,int quantity) throws StockNotExistsException{
 		if (quantity<-1 || quantity==0 ){
-			System.out.println("Erorr - not vaild num (<-1|| =0)");
-			/*return false;*/
+			System.out.println(" number is not vaild  (<-1 or ==0)");
 		}
-		int num = findStock(OtherSymbol);
+		int num = findStockPositionBySymbol(s);
 		if (num == -1 )
 		{
-			System.out.println("Erorr - stock not found");
-			throw new StockNotExistsException(OtherSymbol);
+			System.out.println("stock not found");
+			throw new StockNotExistsException(s);
 		}
 		if (quantity > this.stocksStatus[num].getStockQuantity() ){
-			System.out.println("Erorr - you are asking to sell more then u have");
-			/*return false;*/
+			System.out.println("your'e trying to sell more then you actually have");
 		}
 		if (quantity==-1)
 		{
@@ -160,26 +124,21 @@ public class Portfolio {
 			this.stocksStatus[num].setStockQuantity(this.stocksStatus[num].getStockQuantity()-quantity);
 		}
 	}
-	/**
-	 *
-	 * @param OtherSymbol
-	 * @param quantity
-	 * @return True-success buy / false unsuccess buy
-	 */
+	
 	public void buyStock(String OtherSymbol ,int quantity) throws StockNotExistsException,BalanceException{
 		if (quantity<-1 || quantity==0 ){
-			System.out.println("Erorr - not vaild num (<-1|| =0)");
+			System.out.println(" number is not vaild (<-1 or =0)");
 			//return false;
 		}
-		int num = findStock(OtherSymbol);
+		int num = findStockPositionBySymbol(OtherSymbol);
 		if (num == -1 )
 		{
-			System.out.println("Erorr - stock not found");
+			System.out.println("stock not found");
 			throw new StockNotExistsException(OtherSymbol);
 		}
 		float Value = quantity * this.stocksStatus[num].getAsk();
 		if (Value > this.balance ){
-			System.out.println("Erorr - you are asking to buy more then u can afford");
+			System.out.println("you are trying to buy more then you can afford");
 			throw new BalanceException();
 		}
 		if (quantity==-1)
@@ -194,25 +153,22 @@ public class Portfolio {
 			this.stocksStatus[num].setStockQuantity(this.stocksStatus[num].getStockQuantity()+quantity);
 		}
 	}
-	/**
-	 * add a new Stock to Protfolio
-	 * @param stock - get's a Stock
-	 */
+	
 	public void addStock (Stock stock) throws PortfolioFullException,StockAlreadyExistsException
 	{
 		boolean check=false;
-		if (this.portfolioSize >= MAX_PORTFOLIO_SIZE || stock==null ){//if full or not valid input
+		if (this.portfolioSize >= MAX_PORTFOLIO_SIZE || stock==null ){
 			throw new PortfolioFullException();
 		}
 		else{
 			for(int i =0 ; i<this.portfolioSize;i++)
 			{
-				if ((stock.getSymbol().equals(this.stocksStatus[i].getSymbol()))){//check no - same symbols
+				if ((stock.getSymbol().equals(this.stocksStatus[i].getSymbol()))){
 					check=true;
 					throw new StockAlreadyExistsException(stock.getSymbol());
 				}
 			}
-			if(check==false){//all is well
+			if(check==false){
 				this.stocksStatus[portfolioSize]= new StockStatus(stock);
 				portfolioSize++;
 			}
@@ -220,7 +176,7 @@ public class Portfolio {
 	}
 	/**
 	 *
-	 * @return the html description of this protflio plz notice it use getHtmlDescription from "Stocks"
+	 * @return an html form of portfolio 
 	 */
 	public String getHtmlDescription(){
 		String str = new String();
@@ -231,19 +187,19 @@ public class Portfolio {
 		str+="Total Portfolio Value: "+ this.getTotalValue()+"$"+", Total Stocks value: "+this.getStocksValue()+"$ , Balance: "+this.getbalance()+"$";
 		return str;
 	}
-	//-------------------------------------------------------------Setters----------------------------------------------------------------------------
+	
 	public void setTitle(String title){
 		this.title=new String(title);
 	}
 	public void setBalance(float balance) {
 		this.balance = balance;
 	}
-	//--------------------------------------------------------Setters for the copyConstractors----------------------------
-	private void setStocks (Stock[] otherStocks,int otherPortfolioSize) throws PortfolioFullException,StockAlreadyExistsException{
-		if (otherPortfolioSize<MAX_PORTFOLIO_SIZE && otherPortfolioSize!=0 ){
-			for (int i=0 ;i<otherPortfolioSize;i++)
+	
+	private void setStocks (Stock[] stocks,int PortfolioSize) throws PortfolioFullException,StockAlreadyExistsException{
+		if (PortfolioSize<MAX_PORTFOLIO_SIZE && PortfolioSize!=0 ){
+			for (int i=0 ;i<PortfolioSize;i++)
 			{
-				Stock temp = otherStocks[i];
+				Stock temp = stocks[i];
 				try {
 					this.addStock(temp);
 				} catch (PortfolioFullException e) {
@@ -254,7 +210,7 @@ public class Portfolio {
 			}
 		}
 	}
-	//----------------------------------------------------------------getters----------------------------------------------------------------------------------------------
+	
 	public String getTitle(){
 		return this.title;
 	}

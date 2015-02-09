@@ -4,19 +4,10 @@ import java.util.Date ;
 /**
  * 
  * @author sup4eli
- * description: presentation of a stock(e.g stock market)
+ *   of a stock(e.g stock market)
  * including buying price, selling price, date, and stock symbol 
  * as presented in the stock market.
- *
- */
-
-
-/**
- * 
- * @author sup4eli
- * description: presentation of a stock(e.g stock market)
- * including buying price, selling price, date, and stock symbol 
- * as presented in the stock market.
+ * using as super class for stockStatus in which we actually use.
  *
  */
 
@@ -39,44 +30,42 @@ public class Stock {
 		setSymbol(symbol);
 		setDate(date);
 	}
-	public Stock (Stock stock){//copy c'tor
+	public Stock (Stock stock){
 		this(stock.getAsk(), stock.getBid(), stock.getDate(), stock.getSymbol());
 	}
-	public float getBid() {//bid getter
+	public float getBid() {
 		return bid;
 	}
-	public void setBid(float assignedBid) {//bid setter
+	public void setBid(float assignedBid) {
 		bid = assignedBid ;
 	}
-	public float getAsk() {//ask getter
+	public float getAsk() {
 		return ask;
 	}
-	public void setAsk(float assignedAsk) {//ask setter
+	public void setAsk(float assignedAsk) {
 		ask = assignedAsk ;
 	}
-	public Date getDate(){//in case it doesnt work replace return value to String
-		//SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");  
-		//return format1.format(this.date);
+	public Date getDate(){
 		return date;
 	}
-	public void setDate(Date assignedDate) {//date setter
+	public void setDate(Date assignedDate) {
 		date =  assignedDate ;
 	}
-	public String getSymbol() {//symbol getter
+	public String getSymbol() {
 		return symbol ;
 	}
-	public void setSymbol(String assignedSymbol) {//symbol setter
+	public void setSymbol(String assignedSymbol) {
 		symbol =new String(assignedSymbol);
 	}
 	/**
 	 *
-	 * @return html string presentation of mentioned above stock states
+	 * @return html string form of mentioned above stock states
 	 */
 	public String getHtmlDescription() {
 		String  combined ;
 		
 		combined =  new String("<b>Symbol</b> "+getSymbol()+"<b> ask: </b>" +getAsk()+", <b>bid: </b>"+getBid()+" <b>Date </b>"+ getDate()) ;//how to include a String inside brackets??
-		return combined;//last line
+		return combined;
 		
 	}
 
